@@ -14,6 +14,8 @@ export interface NormalizedImage {
   type: "jpeg" | "png";
   widthPx: number;
   heightPx: number;
+  widthPt?: number;
+  heightPt?: number;
 }
 
 export interface ImagesToPdfOptionsPayload {
@@ -59,7 +61,10 @@ export async function imagesToPdf(
       continue;
     }
 
-    const dims = pageDimensionsFor(image.widthPx, image.heightPx, options);
+    const dims = pageDimensionsFor(image.widthPx, image.heightPx, options, {
+      widthPt: image.widthPt,
+      heightPt: image.heightPt,
+    });
     const page = doc.addPage([dims.width, dims.height]);
     const margin = Math.max(0, options.marginPt);
     const contentWidth = Math.max(1, dims.width - margin * 2);
@@ -91,11 +96,15 @@ export async function imagesToPdf(
 export function pageDimensionsFor(
   widthPx: number,
   heightPx: number,
-  options: Pick<ImagesToPdfOptionsPayload, "pageSize" | "orientation">
+  options: Pick<ImagesToPdfOptionsPayload, "pageSize" | "orientation">,
+  explicitPt?: { widthPt?: number; heightPt?: number }
 ): { width: number; height: number } {
   if (options.pageSize === "auto") {
-    let width = widthPx * 0.75;
-    let height = heightPx * 0.75;
+    if (explicitPt?.widthPt && explicitPt?.heightPt) {
+      return { width: explicitPt.widthPt, height: explicitPt.heightPt };
+    }
+    let width = widthPx;
+    let height = heightPx;
     const largest = Math.max(width, height);
     if (largest > MAX_PAGE_DIMENSION_PT) {
       const factor = MAX_PAGE_DIMENSION_PT / largest;

@@ -45,9 +45,29 @@ SEO: every tool has unique title/description/canonical/OpenGraph, FAQ JSON-LD,
 WebApplication JSON-LD, how-it-works steps, related tools, breadcrumbs.
 Sitemap + robots generated from the registry.
 
+## Phase 2 — Editing suite: COMPLETE
+
+| Tool | Route | Engine | Notes |
+|---|---|---|---|
+| Edit PDF | /edit-pdf | pdf-editor overlay engine in worker | click-to-edit text runs (cover+redraw w/ size fitting), add styled text boxes, whiteout (clearly NOT redaction), image placement, drag-move, zoom, undo/redo, keyboard shortcuts |
+| Sign PDF | /sign-pdf | same editor restricted to image placements | draw/type/upload signature modal; optional white-background removal; never persisted |
+| Fill PDF Form | /fill-form-pdf | pdf-lib AcroForm API in worker | text/checkbox/radio/dropdown/optionlist; widget-rect highlights on live preview; flatten-answers option; XFA unsupported disclosed via empty-field path |
+| Crop & Resize | /crop-resize-pdf | setCropBox + embedPage vector rebuild in worker | visual drag crop (one/all pages, hidden-content warning); A3/A4/Letter/Legal/custom mm/in/pt with center/fit/fill |
+| Headers & Footers | /headers-footers | worker op sharing zone math with preview | {n}/{total}/{date}/{filename} variables, 3 zones per band, margin/size/color/skip-first/ranges |
+| Flatten | /flatten-pdf | form.flatten() after appearance generation | signature-field detection warning; annotation-rasterize & JS-strip honestly out of scope for this pass |
+| Invert Colors | /invert-colors | main-thread batched raster + pixel transforms | invert/grayscale/sepia/high-contrast/dark-reading; exact original page sizes preserved; rasterization disclosed |
+| PDF to Handwriting | /pdf-to-handwriting | canvas render w/ system handwriting fonts -> images-to-PDF | paper styles blank/ruled/grid/margin; deterministic jitter; anti-deception disclaimer |
+| Handwriting to PDF | /handwriting-to-pdf | merge of scans + normalized photos + typed transcription | Beta-labeled; real handwriting OCR deferred to Phase 5 |
+
+Editor architecture: one canonical coordinate model (PDF pt <-> CSS px), serializable
+command objects ({text, whiteout, image, replace-text}), export = pure function over
+commands validated by output re-parse. 34 new tests cover templates, geometry,
+editor-export round-trips, crop box readback, resize targets, AcroForm fill/inspect/
+flatten and text pagination.
+
 ## Deliberately not built yet (per spec phase order)
 
-Phase 2 editor/sign/forms · Phase 3 encryption/redaction/privacy scanner ·
+Phase 3 encryption/redaction/privacy scanner ·
 Phase 4 Ghostscript-WASM compression · Phase 5 OCR/scan · Phase 6–7 office conversion ·
 Phase 8 compare/repair · Phase 9 AI · Phase 10 P2P/whiteboard · Phase 11 GST/POS ·
 Phase 12 workflow builder · Phase 13 SDK · Phase 14 hardening.

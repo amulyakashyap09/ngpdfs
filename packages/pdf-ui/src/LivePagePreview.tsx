@@ -10,6 +10,8 @@ export interface LivePagePreviewProps {
   pageNumber?: number;
   widthCss?: number;
   overlay?: (info: OverlayInfo) => React.ReactNode;
+  onInfo?: (info: PreviewInfo) => void;
+  children?: (info: OverlayInfo & { pageCount: number }) => React.ReactNode;
 }
 
 export interface OverlayInfo {
@@ -18,10 +20,21 @@ export interface OverlayInfo {
   heightPt: number;
 }
 
-export function LivePagePreview({ file, pageNumber = 1, widthCss = 640, overlay }: LivePagePreviewProps) {
+export interface PreviewInfo extends OverlayInfo {
+  pageCount: number;
+}
+
+export function LivePagePreview({
+  file,
+  pageNumber = 1,
+  widthCss = 640,
+  overlay,
+  onInfo,
+  children,
+}: LivePagePreviewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [error, setError] = useState<string | null>(null);
-  const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
+  const [dims, setDims] = useState<{ w: number; h: number; pages: number } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -30,13 +43,18 @@ export function LivePagePreview({ file, pageNumber = 1, widthCss = 640, overlay 
         setError(null);
         const pdf = await loadPdfDocument(file);
         if (cancelled) return;
-        const page = await pdf.getPage(pageNumber);
+        const safePage = Math.min(Math.max(1, pageNumber), pdf.numPages);
+        const page = await pdf.getPage(safePage);
         const base = page.getViewport({ scale: 1 });
-        setDims({ w: base.width, h: base.height });
+        const nextDims = { w: base.width, h: base.height, pages: pdf.numPages };
+        setDims(nextDims);
         page.cleanup();
+        if (!cancelled) {
+          onInfo?.({ scale: widthCss / nextDims.w, widthPt: nextDims.w, heightPt: nextDims.h, pageCount: nextDims.pages });
+        }
         const canvas = canvasRef.current;
         if (!canvas || cancelled) return;
-        await renderPageToCanvas(pdf, pageNumber, {
+        await renderPageToCanvas(pdf, safePage, {
           canvas,
           targetWidthCss: widthCss,
           devicePixelRatioCap: 2,
@@ -48,6 +66,7 @@ export function LivePagePreview({ file, pageNumber = 1, widthCss = 640, overlay 
     return () => {
       cancelled = true;
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- onInfo is a notification callback, not a data dependency
   }, [file, pageNumber, widthCss]);
 
   if (error) {
@@ -63,9 +82,14 @@ export function LivePagePreview({ file, pageNumber = 1, widthCss = 640, overlay 
         style={{ width: widthCss }}
       >
         <canvas ref={canvasRef} aria-label={`Preview of page ${pageNumber}`} role="img" className="block h-auto w-full" />
-        {overlay && dims ? (
+        {dims ? (
           <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-            {overlay({ scale, widthPt: dims.w, heightPt: dims.h })}
+            {overlay
+              ? overlay({ scale, widthPt: dims.w, heightPt: dims.h })
+              : null}
+            {children
+              ? children({ scale, widthPt: dims.w, heightPt: dims.h, pageCount: dims.pages })
+              : null}
           </div>
         ) : null}
       </div>

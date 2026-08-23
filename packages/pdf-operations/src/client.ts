@@ -6,6 +6,15 @@ import type { NinePosition } from "./positions";
 import type { PageNumberAlign, PageNumberFormat, PageNumberPosition } from "./ops/pagenumbers";
 import type { ImagesToPdfOptionsPayload } from "./ops/imagestopdf";
 import type { WorkerDoneResult } from "./worker-handler";
+import type {
+  EditorObject as EditorObjectDTO,
+  EditorImageSource as EditorImageSourceDTO,
+  CropRequest as CropRequestDTO,
+  ResizeOptionsPayload as ResizeOptionsDTO,
+  HeaderFooterOptions as HeaderFooterOptionsDTO,
+  FormValuePayload as FormValuePayloadDTO,
+  TextPagesRequest as TextPagesRequestDTO,
+} from "@paperzero/pdf-editor";
 
 export interface WorkerRunner {
   run<T>(op: string, payload: unknown, options?: WorkerTaskOptions): Promise<T>;
@@ -207,4 +216,106 @@ export async function runSha256(
     { ...options, transfer: [copy.buffer as ArrayBuffer] }
   );
   return result.warnings[0] ?? "";
+}
+export async function runEditorExport(
+  runner: WorkerRunner,
+  file: LocalDocumentFile,
+  objects: EditorObjectDTO[],
+  images: EditorImageSourceDTO[],
+  options: { signal?: AbortSignal; onProgress?: WorkerTaskOptions["onProgress"] }
+): Promise<OperationOutcome> {
+  const bytes = await readBytes(file);
+  const preparedImages = images.map((img) => ({ ...img, bytes: img.bytes.slice() }));
+  const transfer = [bytes.buffer as ArrayBuffer, ...preparedImages.map((i) => i.bytes.buffer as ArrayBuffer)];
+  const result = await runner.run<WorkerDoneResult>(
+    "editor-export",
+    { bytes, objects, images: preparedImages },
+    { ...options, transfer: [...new Set(transfer)] }
+  );
+  return { files: toOutputFiles(result), warnings: result.warnings };
+}
+
+export async function runCrop(
+  runner: WorkerRunner,
+  file: LocalDocumentFile,
+  request: CropRequestDTO,
+  options: { signal?: AbortSignal; onProgress?: WorkerTaskOptions["onProgress"] }
+): Promise<OperationOutcome> {
+  const bytes = await readBytes(file);
+  const result = await runner.run<WorkerDoneResult>(
+    "crop",
+    { bytes, request },
+    { ...options, transfer: [bytes.buffer as ArrayBuffer] }
+  );
+  return { files: toOutputFiles(result), warnings: result.warnings };
+}
+
+export async function runResize(
+  runner: WorkerRunner,
+  file: LocalDocumentFile,
+  resizeOptions: ResizeOptionsDTO,
+  options: { signal?: AbortSignal; onProgress?: WorkerTaskOptions["onProgress"] }
+): Promise<OperationOutcome> {
+  const bytes = await readBytes(file);
+  const result = await runner.run<WorkerDoneResult>(
+    "resize",
+    { bytes, options: resizeOptions },
+    { ...options, transfer: [bytes.buffer as ArrayBuffer] }
+  );
+  return { files: toOutputFiles(result), warnings: result.warnings };
+}
+
+export async function runHeadersFooters(
+  runner: WorkerRunner,
+  file: LocalDocumentFile,
+  hfOptions: HeaderFooterOptionsDTO,
+  options: { signal?: AbortSignal; onProgress?: WorkerTaskOptions["onProgress"] }
+): Promise<OperationOutcome> {
+  const bytes = await readBytes(file);
+  const result = await runner.run<WorkerDoneResult>(
+    "headers-footers",
+    { bytes, options: hfOptions },
+    { ...options, transfer: [bytes.buffer as ArrayBuffer] }
+  );
+  return { files: toOutputFiles(result), warnings: result.warnings };
+}
+
+export async function runFlattenForms(
+  runner: WorkerRunner,
+  file: LocalDocumentFile,
+  flattenOptions: { rasterizeFallback?: boolean } = {},
+  options: { signal?: AbortSignal; onProgress?: WorkerTaskOptions["onProgress"] }
+): Promise<OperationOutcome> {
+  const bytes = await readBytes(file);
+  const result = await runner.run<WorkerDoneResult>(
+    "flatten-forms",
+    { bytes, ...flattenOptions },
+    { ...options, transfer: [bytes.buffer as ArrayBuffer] }
+  );
+  return { files: toOutputFiles(result), warnings: result.warnings };
+}
+
+export async function runFillForm(
+  runner: WorkerRunner,
+  file: LocalDocumentFile,
+  values: FormValuePayloadDTO[],
+  fillOptions: { flattenAnswers?: boolean },
+  options: { signal?: AbortSignal; onProgress?: WorkerTaskOptions["onProgress"] }
+): Promise<OperationOutcome> {
+  const bytes = await readBytes(file);
+  const result = await runner.run<WorkerDoneResult>(
+    "fill-form",
+    { bytes, values, options: fillOptions },
+    { ...options, transfer: [bytes.buffer as ArrayBuffer] }
+  );
+  return { files: toOutputFiles(result), warnings: result.warnings };
+}
+
+export async function runTextPages(
+  runner: WorkerRunner,
+  request: TextPagesRequestDTO,
+  options: { signal?: AbortSignal; onProgress?: WorkerTaskOptions["onProgress"] }
+): Promise<OperationOutcome> {
+  const result = await runner.run<WorkerDoneResult>("text-pages", request, { ...options });
+  return { files: toOutputFiles(result), warnings: result.warnings };
 }

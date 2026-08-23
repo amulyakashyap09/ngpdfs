@@ -12,3 +12,10 @@ export { useOperation, type UseOperationReturn, type OperationTask } from "./use
 export { useFileDocuments, type DocumentEntry } from "./useFileDocuments";
 export { ToolPageLayout, type ToolPageMeta, type RelatedToolLink } from "./ToolPageLayout";
 export { LivePagePreview, overlayTextStyle, type OverlayInfo } from "./LivePagePreview";
+export {
+  PdfEditor,
+  rgbToHex,
+  hexToRgb01,
+  type PdfEditorProps,
+} from "./PdfEditor";
+export { SignatureModal, type SignatureResult } from "./SignatureModal";

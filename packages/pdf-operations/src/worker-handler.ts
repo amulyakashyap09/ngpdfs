@@ -13,6 +13,21 @@ import {
 import { applyPageNumbers, type PageNumbersOptionsPayload } from "./ops/pagenumbers";
 import { stripBasicMetadata } from "./ops/metadata";
 import { imagesToPdf, type ImagesToPdfOptionsPayload, type NormalizedImage } from "./ops/imagestopdf";
+import {
+  applyEditorObjects,
+  applyCrop,
+  applyResize,
+  applyHeadersFooters,
+  flattenForms,
+  fillAndSave,
+  buildTextPages,
+  type EditorExportPayload,
+  type CropRequest,
+  type ResizeOptionsPayload,
+  type HeaderFooterOptions,
+  type FormValuePayload,
+  type TextPagesRequest,
+} from "@paperzero/pdf-editor";
 
 export interface WorkerTaskGuard {
   readonly cancelled: boolean;
@@ -57,6 +72,34 @@ const OPS: Record<string, OpHandler> = {
   },
   "images-to-pdf": async (payload: { images: NormalizedImage[]; options: ImagesToPdfOptionsPayload }, guard) => {
     return await imagesToPdf(payload.images, payload.options, guard);
+  },
+  "editor-export": async (payload: EditorExportPayload, guard) => {
+    return await applyEditorObjects(payload, guard);
+  },
+  "crop": async (payload: { bytes: Uint8Array; request: CropRequest }, guard) => {
+    return await applyCrop(payload.bytes, payload.request, guard);
+  },
+  "resize": async (payload: { bytes: Uint8Array; options: ResizeOptionsPayload }, guard) => {
+    return await applyResize(payload.bytes, payload.options, guard);
+  },
+  "headers-footers": async (payload: { bytes: Uint8Array; options: HeaderFooterOptions }, guard) => {
+    return await applyHeadersFooters(payload.bytes, payload.options, guard);
+  },
+  "flatten-forms": async (payload: { bytes: Uint8Array; rasterizeFallback?: boolean }, guard) => {
+    return await flattenForms(payload.bytes, { rasterizeFallback: payload.rasterizeFallback }, guard);
+  },
+  "fill-form": async (
+    payload: {
+      bytes: Uint8Array;
+      values: FormValuePayload[];
+      options: { flattenAnswers?: boolean };
+    },
+    guard
+  ) => {
+    return await fillAndSave(payload.bytes, payload.values, payload.options, guard);
+  },
+  "text-pages": async (payload: TextPagesRequest, guard) => {
+    return await buildTextPages(payload, guard);
   },
 };
 

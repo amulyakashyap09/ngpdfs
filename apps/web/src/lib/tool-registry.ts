@@ -428,6 +428,301 @@ export const TOOLS: ToolDefinition[] = [
   }),
 
   t({
+    id: "edit-pdf",
+    slug: "edit-pdf",
+    name: "Edit PDF",
+    shortDescription: "Click any text to rewrite it; add text boxes, images and whiteout.",
+    longDescription:
+      "A full visual PDF editor: click-to-edit existing text with automatic cover-and-redraw, add styled text boxes anywhere, whiteout visual mistakes, place images, drag to reposition everything, undo/redo freely - then export a validated PDF locally.",
+    category: "edit",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["change text", "fix typo", "add textbox", "white out", "editor"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a PDF and pick a tool from the editor toolbar.",
+      "\u201cEdit text\u201d highlights every text run - click one to rewrite it in place.",
+      "Add text boxes, whiteout areas or images; drag to move, panel to style.",
+      "Export rebuilds your edits into a validated PDF - nothing was uploaded.",
+    ],
+    faq: [
+      {
+        question: "How does click-to-edit work?",
+        answer:
+          "We map each visible text run to its exact position, cover that region and draw your replacement on top using matching size and color. Complex embedded fonts fall back to Helvetica equivalents, which we note honestly.",
+      },
+      {
+        question: "Is Whiteout secure like redaction?",
+        answer:
+          "No. Whiteout visually covers content. True redaction (permanently removing content) is planned for our Privacy Suite phase.",
+      },
+      {
+        question: "Can I edit scanned pages?",
+        answer:
+          "Scanned pages have no selectable text yet. OCR-assisted editing is planned; you can still whiteout and add text over them today.",
+      },
+    ],
+    relatedToolIds: ["watermark-pdf", "flatten-pdf", "crop-resize-pdf"],
+  }),
+  t({
+    id: "sign-pdf",
+    slug: "sign-pdf",
+    name: "Sign PDF",
+    shortDescription: "Draw, type or upload a signature and place it on any page.",
+    longDescription:
+      "Sign documents without printing: create a signature by drawing with mouse/finger, typing your name in a handwriting style, or uploading a photo (with optional background removal). Place it on any page, resize and export. Your signature never leaves this device and is never stored.",
+    category: "edit",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["signature", "initials", "draw", "sign document"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open the document you need to sign.",
+      "Create a signature: draw it, type your name, or upload an image.",
+      "Click where the signature belongs; switch pages to sign again.",
+      "Download the signed file instantly.",
+    ],
+    faq: [
+      {
+        question: "Is this a certified digital signature?",
+        answer:
+          "No. It places an image of your signature - perfect for everyday approvals. Cryptographic certificate signing is a different product category.",
+      },
+      {
+        question: "Do you store my signature?",
+        answer:
+          "Never. It exists only in this browser tab's memory until you close or reset the page.",
+      },
+    ],
+    relatedToolIds: ["edit-pdf", "fill-form-pdf"],
+  }),
+  t({
+    id: "fill-form-pdf",
+    slug: "fill-form-pdf",
+    name: "Fill PDF Form",
+    shortDescription: "Complete AcroForm fields and optionally flatten answers.",
+    longDescription:
+      "Fill interactive PDF forms entirely offline. Text fields, checkboxes, radio groups and dropdowns are detected automatically, listed for quick entry and highlighted on a live page preview. Save with editable fields preserved or flattened.",
+    category: "edit",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["form", "acroform", "fillable", "tax form", "application"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a fillable PDF - fields are detected automatically.",
+      "Type answers in the side list or click highlighted boxes on the preview.",
+      "Choose to keep fields editable or flatten answers into the page.",
+      "Save your completed form locally.",
+    ],
+    faq: [
+      {
+        question: "Which field types are supported?",
+        answer:
+          "Text fields, checkboxes, radio groups, dropdowns and option lists. XFA forms and digital signature fields are not supported and reported honestly when detected.",
+      },
+      {
+        question: "What does flatten do?",
+        answer:
+          "It bakes your answers into the page appearance so the values cannot be changed by ordinary viewers.",
+      },
+    ],
+    relatedToolIds: ["sign-pdf", "flatten-pdf"],
+  }),
+  t({
+    id: "crop-resize-pdf",
+    slug: "crop-resize-pdf",
+    name: "Crop & Resize PDF",
+    shortDescription: "Trim margins visually or convert pages between A4/Letter/Legal and more.",
+    longDescription:
+      "Crop pages by drawing the exact area to keep (single page or all pages), or resize whole documents to A3/A4/Letter/Legal/custom dimensions in mm/in/pt with center, fit or fill scaling. Cropping uses structural CropBoxes; resizing rebuilds pages as sharp vector layers.",
+    category: "page-management",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["trim", "margins", "a4", "letter", "scale pages"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a PDF and choose Crop or Resize.",
+      "Crop: drag the keep-area on the live preview, apply to one or all pages.",
+      "Resize: pick target preset or custom dimensions plus fit mode.",
+      "Download the adjusted document.",
+    ],
+    faq: [
+      {
+        question: "Does cropping permanently delete hidden content?",
+        answer:
+          "No - cropping hides content via the CropBox. Sensitive content outside the box remains in the file; use redaction (coming soon) for permanent removal.",
+      },
+      {
+        question: "Will resized text stay sharp?",
+        answer:
+          "Yes. Pages are embedded as vector drawings, not screenshots.",
+      },
+    ],
+    relatedToolIds: ["organize-pdf", "rotate-pdf"],
+  }),
+  t({
+    id: "headers-footers",
+    slug: "headers-footers",
+    name: "Headers & Footers",
+    shortDescription: "Stamp custom headers/footers with {n}, {date} and {filename} variables.",
+    longDescription:
+      "Add professional headers and footers to any PDF: independent left/center/right zones per band, template variables for page numbers, totals, dates and the processed filename, adjustable font, size, color, edge distance and page ranges - with a live preview that matches the output exactly.",
+    category: "edit",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["header", "footer", "date stamp", "file name", "bates"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a PDF.",
+      "Enable header/footer zones and type templates using variables like {n} or {date}.",
+      "Tune font, color and distance from the page edge.",
+      "Watch the live preview, then apply and download.",
+    ],
+    faq: [
+      {
+        question: "What variables can I use?",
+        answer:
+          "{n} = current page number, {total} = numbered total, {date} = today (your clock, never sent anywhere), {filename} = the processed file name.",
+      },
+      {
+        question: "Different first page?",
+        answer:
+          "Enable \u2018Skip first page\u2019 to leave covers unnumbered while numbering continues correctly on page two.",
+      },
+    ],
+    relatedToolIds: ["add-page-numbers", "watermark-pdf"],
+  }),
+  t({
+    id: "flatten-pdf",
+    slug: "flatten-pdf",
+    name: "Flatten PDF",
+    shortDescription: "Bake form answers into fixed page content.",
+    longDescription:
+      "Convert fillable form fields into static page appearances so completed forms can no longer be edited by ordinary viewers. Signature-field presence is detected and disclosed before processing.",
+    category: "security",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["flatten form", "static", "non-editable", "lock answers"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a filled PDF form.",
+      "Review what will be flattened (field count and signature warnings).",
+      "Flatten and download - answers become part of the page.",
+    ],
+    faq: [
+      {
+        question: "Is flattening permanent?",
+        answer:
+          "Fields stop being editable in normal viewers, but no PDF is truly immutable - capable tools can still modify files.",
+      },
+      {
+        question: "What about digital signatures?",
+        answer:
+          "If signature fields exist we warn first: modifying signed files invalidates their cryptographic signatures.",
+      },
+    ],
+    relatedToolIds: ["fill-form-pdf", "remove-metadata"],
+  }),
+  t({
+    id: "invert-colors",
+    slug: "invert-colors",
+    name: "Invert PDF Colors",
+    shortDescription: "Invert, grayscale, sepia, high-contrast or dark reading modes.",
+    longDescription:
+      "Restyle any PDF for comfortable reading: full color inversion, grayscale, sepia, boosted high-contrast black & white, or a dark-reading mode for night-time. Pages render at your chosen DPI with honest disclosure that text becomes rasterized.",
+    category: "convert-from-pdf",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["dark mode", "night reading", "negative", "grayscale", "contrast"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a PDF.",
+      "Pick a mode: invert, grayscale, sepia, high contrast or dark reading.",
+      "Choose render DPI (memory-safe caps applied automatically).",
+      "Download the restyled document.",
+    ],
+    faq: [
+      {
+        question: "Why is text no longer selectable?",
+        answer:
+          "Color transforms require re-rendering pages as images. We say this up front rather than pretending otherwise - keep the original file for archival.",
+      },
+    ],
+    relatedToolIds: ["compress-pdf", "extract-text"],
+  }),
+  t({
+    id: "pdf-to-handwriting",
+    slug: "pdf-to-handwriting",
+    name: "PDF to Handwriting",
+    shortDescription: "Restyle typed notes as handwriting on ruled, grid or blank paper.",
+    longDescription:
+      "Turn pasted or extracted text into natural-looking handwritten-style pages: choose paper styles (blank, ruled, grid, margin line), ink color, letter size and line spacing. Rendered locally with your device's handwriting fonts onto print-ready A4 pages.",
+    category: "edit",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["handwriting", "notes", "study", "styled text"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Paste your text or extract it from an uploaded PDF.",
+      "Pick paper style, writing style, ink color and spacing.",
+      "Pages render locally at print resolution.",
+      "Download the styled PDF.",
+    ],
+    faq: [
+      {
+        question: "Is this real handwriting?",
+        answer:
+          "No. It is your system's handwriting-style fonts rendered onto paper backgrounds. Please don't use it to misrepresent authorship.",
+      },
+    ],
+    relatedToolIds: ["extract-text", "handwriting-to-pdf"],
+  }),
+  t({
+    id: "handwriting-to-pdf",
+    slug: "handwriting-to-pdf",
+    name: "Handwriting to PDF",
+    shortDescription: "Combine note photos and scans into one PDF with optional transcription.",
+    longDescription:
+      "Digitize handwritten notes: import photos or scanned PDFs, arrange them in order, and optionally append a typed transcription page. Automatic handwriting recognition arrives with our OCR engine - until then we label this workflow Beta honestly.",
+    category: "edit",
+    outputTypes: ["pdf"],
+    acceptedFileTypes: "application/pdf,image/jpeg,image/png,image/webp",
+    tags: ["notes", "scan", "digitize", "transcription"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Add scans (PDF) and/or photos of notes and arrange their order.",
+      "Optionally write a typed transcription to append.",
+      "Build one combined PDF locally.",
+    ],
+    faq: [
+      {
+        question: "Does it read my handwriting automatically?",
+        answer:
+          "Not yet. Handwriting OCR ships with our OCR engine later; today you can attach a manually typed transcription page.",
+      },
+    ],
+    relatedToolIds: ["images-to-pdf", "merge-pdf", "pdf-to-handwriting"],
+  }),
+
+  t({
     id: "compress-pdf",
     slug: "compress-pdf",
     name: "Compress PDF",
@@ -491,40 +786,6 @@ export const TOOLS: ToolDefinition[] = [
     remoteProcessingDisclosure: null,
     status: "coming-soon",
     plannedPhase: "Phase 5",
-    howItWorks: [],
-    faq: [],
-    relatedToolIds: [],
-  }),
-  t({
-    id: "sign-pdf",
-    slug: "sign-pdf",
-    name: "Sign PDF",
-    shortDescription: "Draw, type or upload a signature and place it on a PDF.",
-    longDescription: "Add signatures to documents locally; signatures never leave your device.",
-    category: "edit",
-    outputTypes: ["pdf"],
-    tags: ["signature", "initials", "draw"],
-    offlineCapable: true,
-    remoteProcessingDisclosure: null,
-    status: "coming-soon",
-    plannedPhase: "Phase 2",
-    howItWorks: [],
-    faq: [],
-    relatedToolIds: [],
-  }),
-  t({
-    id: "edit-pdf-text",
-    slug: "edit-pdf-text",
-    name: "Edit PDF Text",
-    shortDescription: "Click text in a PDF and rewrite it in place.",
-    longDescription: "Point-and-click text editing with overlay-based replacement.",
-    category: "edit",
-    outputTypes: ["pdf"],
-    tags: ["change text", "fix typo"],
-    offlineCapable: true,
-    remoteProcessingDisclosure: null,
-    status: "coming-soon",
-    plannedPhase: "Phase 2",
     howItWorks: [],
     faq: [],
     relatedToolIds: [],
