@@ -1,0 +1,21 @@
+{
+  "name": "@paperzero/pdf-operations",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@paperzero/shared": "*",
+    "@paperzero/pdf-core": "*",
+    "pdf-lib": "^1.17.1",
+    "jszip": "^3.10.1"
+  },
+  "peerDependencies": {
+    "pdfjs-dist": "^4.10.38"
+  }
+}
