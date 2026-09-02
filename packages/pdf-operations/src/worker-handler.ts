@@ -28,6 +28,17 @@ import {
   type FormValuePayload,
   type TextPagesRequest,
 } from "@paperzero/pdf-editor";
+import {
+  encryptPdf,
+  decryptToPlainCopy,
+  stripRestrictions,
+  sanitizePdf,
+  buildRedactedPdf,
+  type EncryptOptionsPayload,
+  type UserPermissions,
+  type SanitizeOptionsPayload,
+  type RedactBuildPayload,
+} from "@paperzero/pdf-security";
 
 export interface WorkerTaskGuard {
   readonly cancelled: boolean;
@@ -100,6 +111,40 @@ const OPS: Record<string, OpHandler> = {
   },
   "text-pages": async (payload: TextPagesRequest, guard) => {
     return await buildTextPages(payload, guard);
+  },
+  "encrypt": async (
+    payload: {
+      bytes: Uint8Array;
+      userPassword: string;
+      ownerPassword?: string;
+      permissions?: UserPermissions;
+    },
+    guard
+  ) => {
+    const options: EncryptOptionsPayload = {
+      userPassword: payload.userPassword,
+      ownerPassword: payload.ownerPassword,
+      permissions: payload.permissions,
+    };
+    return await encryptPdf(payload.bytes, options, guard);
+  },
+  "decrypt-strip": async (payload: { bytes: Uint8Array; password: string }, guard) => {
+    return await decryptToPlainCopy(payload.bytes, payload.password, guard);
+  },
+  "strip-restrictions": async (
+    payload: { bytes: Uint8Array; password?: string },
+    guard
+  ) => {
+    return await stripRestrictions(payload.bytes, payload.password, guard);
+  },
+  "sanitize": async (
+    payload: { bytes: Uint8Array; options: SanitizeOptionsPayload },
+    guard
+  ) => {
+    return await sanitizePdf(payload.bytes, payload.options, guard);
+  },
+  "redact-build": async (payload: RedactBuildPayload, guard) => {
+    return await buildRedactedPdf(payload, guard);
   },
 };
 

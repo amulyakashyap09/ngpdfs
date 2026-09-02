@@ -1,6 +1,6 @@
 # Parity status vs. spec (README(2).md)
 
-Status date: 2026-08-23
+Status date: 2026-09-02
 
 ## Phase 0 — Foundation: COMPLETE
 
@@ -65,9 +65,27 @@ commands validated by output re-parse. 34 new tests cover templates, geometry,
 editor-export round-trips, crop box readback, resize targets, AcroForm fill/inspect/
 flatten and text pagination.
 
+## Phase 3 — Security & Privacy suite: COMPLETE
+
+| Tool | Route | Engine | Notes |
+|---|---|---|---|
+| Encrypt PDF | /encrypt-pdf | @cantoo/pdf-lib 2.9.1 (MIT) `encrypt()` — AES-256 / R6 in worker | user+optional separate owner passwords, best-effort permission flags; output verified by re-opening with the user password; password state wiped after success/reset and never persisted/logged |
+| Remove Password | /remove-password | load-with-password → copy-pages rebuild strips security handler | wrong password maps to WRONG_PASSWORD code; no cracking, ever |
+| Unlock Permissions | /unlock-pdf | same strip path | owner-only files demand their password first (honest routing per spec); authorized-use framing |
+| Redact PDF | /redact-pdf | rasterize-affected-pages fallback + vector overlay in worker | drag regions OR search-and-mark-all with correct per-page placement; optional REDACTED label; DPI choice; post-export verification extracts text and checks marked terms |
+| Auto-Redact PII | /auto-redact-pii | pure detectors over per-item text mapped to glyph rects | email/phone/card(Luhn)/PAN/Aadhaar(Verhoeff)/IP/URL/custom regex; per-candidate review and page highlights; affected pages rendered at 165 DPI; same verification pipeline |
+| Privacy Scanner | /privacy-scanner | catalog/page-node inspection via @cantoo/pdf-lib | info/XMP, JavaScript/actions, EmbeddedFiles, annotations/external links, form/signature fields, best-effort JPEG EXIF/GPS detection; reports yes/no/partial removal capability and offers selected vs safe-metadata cleaning |
+| Sanitize PDF | /sanitize-pdf | explicit-toggle cleaner op | properties/XMP/JS/attachments/annotations/form-flatten shown BEFORE processing |
+
+Fingerprint tool shipped earlier covers the remaining Phase 3 item.
+
+New package packages/pdf-security (@cantoo/pdf-lib MIT). 23 security tests: AES-256
+round-trips incl. wrong-password mapping, Luhn/Verhoeff/PAN vectors, PII grouping,
+scanner score improvement after sanitize, annotation/link/JS injection and removal,
+redact-build page-count preservation and verification logic.
+
 ## Deliberately not built yet (per spec phase order)
 
-Phase 3 encryption/redaction/privacy scanner ·
 Phase 4 Ghostscript-WASM compression · Phase 5 OCR/scan · Phase 6–7 office conversion ·
 Phase 8 compare/repair · Phase 9 AI · Phase 10 P2P/whiteboard · Phase 11 GST/POS ·
 Phase 12 workflow builder · Phase 13 SDK · Phase 14 hardening.
@@ -77,7 +95,7 @@ These appear as "coming soon" cards with planned phase labels — no dead links.
 ## Known limitations (honest)
 
 1. Playwright E2E suites are specified in the README but not included here; verification
-   is via 134 vitest tests (incl. real pdf-lib round-trips and the full worker protocol)
+   is via 191 vitest tests (incl. real pdf-lib round-trips and the full worker protocol)
    plus a production-build smoke check of all routes.
 2. Extract-text reading order is a heuristic; complex multi-column layouts may need cleanup.
 3. Remove Metadata does not strip XMP packets (disclosed).
@@ -85,3 +103,8 @@ These appear as "coming soon" cards with planned phase labels — no dead links.
    worker (OffscreenCanvas path is future work); DPI clamps keep it within budget.
 5. CSP allows `unsafe-inline` scripts/styles because Next.js hydration requires it
    without nonce middleware (documented trade-off permitted by the spec).
+6. PII matching currently depends on an existing text layer. Scanned PDFs require the
+   Phase 5 OCR engine. Search-and-redact matches within extracted PDF.js text items;
+   terms split across separate glyph runs may need manual region marking.
+7. Embedded JPEG EXIF/GPS scanning is best-effort. Detection is reported, but the
+   sanitizer does not yet rewrite embedded images and labels those findings non-removable.

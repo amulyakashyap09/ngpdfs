@@ -10,6 +10,8 @@ apps/web (Next.js)
 
 packages/pdf-ui      React components + hooks (useFileDocuments, useOperation)
 packages/pdf-operations  pure PDF functions (pdf-lib), worker handler, client facades
+packages/pdf-security    encryption, authorized decryption, PII detection, privacy
+                         inspection/sanitizing, raster-redaction assembly/verification
 packages/pdf-core        file model, validation, pdfjs loader/renderer, WorkerPool,
                          IndexedDB, history, downloader, operation contract/runner
 packages/shared          errors, capabilities, memory math, parsing, analytics sanitizer

@@ -36,6 +36,10 @@ export function FingerprintClient() {
 
   return (
     <div className="flex flex-col gap-6">
+      <p className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+        <strong>Processed locally in your browser.</strong> SHA-256 verifies exact byte identity; it
+        does not embed a recipient tracker or modify the file.
+      </p>
       <FileDropzone
         accept="*/*"
         label="Choose any file or drop it here"

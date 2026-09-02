@@ -1,0 +1,17 @@
+{
+  "name": "@paperzero/pdf-security",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cantoo/pdf-lib": "^2.4.0",
+    "@paperzero/shared": "*",
+    "@paperzero/pdf-core": "*"
+  }
+}

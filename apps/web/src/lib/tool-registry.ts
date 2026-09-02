@@ -723,6 +723,234 @@ export const TOOLS: ToolDefinition[] = [
   }),
 
   t({
+    id: "encrypt-pdf",
+    slug: "encrypt-pdf",
+    name: "Encrypt PDF",
+    shortDescription: "Protect a PDF with AES-256 password encryption, on-device.",
+    longDescription:
+      "Add real password protection using AES-256 - the only cipher ISO 32000-2 still recommends. Set an open password, optionally separate owner permissions for printing and copying. Everything happens in this browser; the password is never sent or stored.",
+    category: "security",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["password", "protect", "lock", "aes-256", "secure"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a PDF.",
+      "Choose a strong password and confirm it.",
+      "Optionally adjust reader permissions like printing or copying.",
+      "Download the encrypted file - the password cannot be recovered later.",
+    ],
+    faq: [
+      {
+        question: "How strong is this encryption?",
+        answer:
+          "AES-256 with revision 6 security handler, exactly what the PDF standard recommends. There is no backdoor and no recovery if you lose the password.",
+      },
+      {
+        question: "What do permissions control?",
+        answer:
+          "Whether viewers allow printing, copying text, editing or commenting. Note that permission flags are advisory - a determined user with tools can bypass them; the open password is the real protection.",
+      },
+    ],
+    relatedToolIds: ["remove-password", "privacy-scanner", "sanitize-pdf"],
+  }),
+  t({
+    id: "remove-password",
+    slug: "remove-password",
+    name: "Remove Password",
+    shortDescription: "Decrypt a PDF you know the password to, entirely on-device.",
+    longDescription:
+      "Remove password protection from a PDF by decrypting it locally with the password you already know. The document is rebuilt as an unencrypted copy without ever sending your password anywhere. PaperZero does not crack unknown passwords.",
+    category: "security",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["decrypt", "unlock", "password", "no password"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open the protected PDF.",
+      "Enter the password you use to open it.",
+      "The file is decrypted on this device and rebuilt without protection.",
+      "Download the unrestricted copy.",
+    ],
+    faq: [
+      {
+        question: "Can you remove a password I don't know?",
+        answer:
+          "No - that would be cracking, which PaperZero will never do. You must supply the legitimate password.",
+      },
+      {
+        question: "Where does my password go?",
+        answer:
+          "Nowhere. It exists only in this browser tab's memory for the decryption step and is cleared afterwards.",
+      },
+    ],
+    relatedToolIds: ["encrypt-pdf", "unlock-pdf"],
+  }),
+  t({
+    id: "unlock-pdf",
+    slug: "unlock-pdf",
+    name: "Unlock PDF Permissions",
+    shortDescription: "Strip print/copy/edit restrictions from documents you may modify.",
+    longDescription:
+      "Rebuild a permission-restricted PDF without its security handler so printing, copying and annotation work again. Intended strictly for documents you are authorized to modify. Files that require an opening password ask for it first - no cracking.",
+    category: "security",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["restrictions", "owner password", "enable printing", "enable copying"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open the restricted document.",
+      "If it needs an opening password, provide it.",
+      "The file is rebuilt locally without permission flags.",
+      "Download the unrestricted copy.",
+    ],
+    faq: [
+      {
+        question: "Is bypassing restrictions legal?",
+        answer:
+          "Rules vary by jurisdiction. Only use this on documents you own or are authorized to modify - e.g. re-enabling printing on files you created yourself.",
+      },
+    ],
+    relatedToolIds: ["remove-password", "flatten-pdf"],
+  }),
+  t({
+    id: "redact-pdf",
+    slug: "redact-pdf",
+    name: "Redact PDF",
+    shortDescription: "Permanently remove sensitive content - not just cover it.",
+    longDescription:
+      "True redaction: mark areas visually or search for terms across all pages, then affected pages are rebuilt from rendered images with black vector overlays - the underlying text is gone, not hidden. Every export is verified against extractable text so you know the redaction held.",
+    category: "security",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["black out", "censor", "hide text", "confidential", "permanent"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a PDF and drag boxes over sensitive areas, or search terms to mark every match.",
+      "Review marked regions per page.",
+      "Export rebuilds affected pages with content permanently removed.",
+      "Automatic verification confirms the removed text can no longer be extracted.",
+    ],
+    faq: [
+      {
+        question: "Why is this different from whiteout or a black rectangle?",
+        answer:
+          "Covering leaves the text intact underneath where anyone with tools can copy it. Redaction rebuilds the page itself so the data physically no longer exists.",
+      },
+      {
+        question: "Why does redacted page text become non-selectable?",
+        answer:
+          "Secure removal requires replacing the page with its rendered image. This is the honest trade-off; we verify removal rather than pretend otherwise.",
+      },
+    ],
+    relatedToolIds: ["auto-redact-pii", "whiteout note in edit-pdf", "privacy-scanner"],
+  }),
+  t({
+    id: "auto-redact-pii",
+    slug: "auto-redact-pii",
+    name: "Auto-Redact PII",
+    shortDescription: "Detect emails, cards, PAN, Aadhaar-style IDs & more - review before redacting.",
+    longDescription:
+      "Local PII detection finds email addresses, phone numbers, credit-card numbers (Luhn-validated), Indian PAN numbers, Aadhaar-style IDs (Verhoeff-validated), IP addresses and custom regexes. Every finding is a suggestion: review, deselect, then redact permanently with verification.",
+    category: "security",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["PII", "personal data", "GDPR", "auto redact", "sensitive info"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a PDF - detection runs locally over every page.",
+      "Review findings grouped by type with validation status.",
+      "Select what should be removed (URLs and IPs default off).",
+      "Redact permanently with automatic verification.",
+    ],
+    faq: [
+      {
+        question: "Does detection send my text anywhere?",
+        answer:
+          "No. All scanning happens in this browser tab using local pattern matching and checksum validators.",
+      },
+      {
+        question: "Can it miss things?",
+        answer:
+          "Yes - detection covers common patterns only. Review carefully; scanned pages need OCR (planned) since they have no text layer.",
+      },
+    ],
+    relatedToolIds: ["redact-pdf", "privacy-scanner"],
+  }),
+  t({
+    id: "privacy-scanner",
+    slug: "privacy-scanner",
+    name: "Privacy Risk Scanner",
+    shortDescription: "Score your PDF's privacy risks and clean them in one click.",
+    longDescription:
+      "A local risk report for any PDF: author identity, software traces, timestamps, XMP packets, embedded JavaScript, attachments, comments, form values, external links and even GPS coordinates inside embedded photos (best-effort EXIF scan). Get a 0-100 score, then remove removable risks instantly.",
+    category: "security",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["metadata check", "risk report", "hidden data", "clean", "score"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a PDF - analysis runs locally.",
+      "Read the score and severity-ranked findings.",
+      "Click once to remove everything removable.",
+      "See the improved re-scan score of the cleaned file.",
+    ],
+    faq: [
+      {
+        question: "What lowers the score most?",
+        answer:
+          "Embedded JavaScript, attachments, GPS traces in photos, author names and XMP packets carry the highest weights.",
+      },
+      {
+        question: "Does it catch everything?",
+        answer:
+          "It covers common categories honestly labeled above. Exotic hidden structures may exist; we avoid overclaiming.",
+      },
+    ],
+    relatedToolIds: ["sanitize-pdf", "remove-metadata"],
+  }),
+  t({
+    id: "sanitize-pdf",
+    slug: "sanitize-pdf",
+    name: "Sanitize PDF",
+    shortDescription: "Strip properties, XMP, JavaScript, attachments and comments in one pass.",
+    longDescription:
+      "A precise cleaning pass where you choose exactly what to remove: document properties, XMP metadata, JavaScript actions, embedded attachments, comment annotations and/or flatten form answers. Shown up front, processed locally, verified afterwards.",
+    category: "security",
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf"],
+    tags: ["clean", "strip metadata", "safe to share", "remove js"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Open a PDF.",
+      "Tick exactly what should be removed - shown before processing.",
+      "Sanitize and download the cleaned file.",
+    ],
+    faq: [
+      {
+        question: "Difference vs Privacy Scanner?",
+        answer:
+          "The scanner diagnoses and scores; Sanitize is the surgical cleaning step with explicit toggles. They work great together.",
+      },
+    ],
+    relatedToolIds: ["privacy-scanner", "encrypt-pdf"],
+  }),
+
+  t({
     id: "compress-pdf",
     slug: "compress-pdf",
     name: "Compress PDF",
@@ -735,40 +963,6 @@ export const TOOLS: ToolDefinition[] = [
     remoteProcessingDisclosure: null,
     status: "coming-soon",
     plannedPhase: "Phase 4",
-    howItWorks: [],
-    faq: [],
-    relatedToolIds: [],
-  }),
-  t({
-    id: "encrypt-pdf",
-    slug: "encrypt-pdf",
-    name: "Encrypt PDF",
-    shortDescription: "Protect a PDF with a password, entirely on-device.",
-    longDescription: "Add password protection and permissions to a PDF locally.",
-    category: "security",
-    outputTypes: ["pdf"],
-    tags: ["password", "protect", "lock"],
-    offlineCapable: true,
-    remoteProcessingDisclosure: null,
-    status: "coming-soon",
-    plannedPhase: "Phase 3",
-    howItWorks: [],
-    faq: [],
-    relatedToolIds: [],
-  }),
-  t({
-    id: "redact-pdf",
-    slug: "redact-pdf",
-    name: "Redact PDF",
-    shortDescription: "Permanently remove sensitive text and regions before sharing.",
-    longDescription: "True redaction that deletes underlying content, not just black boxes.",
-    category: "security",
-    outputTypes: ["pdf"],
-    tags: ["black out", "hide", "censor", "PII"],
-    offlineCapable: true,
-    remoteProcessingDisclosure: null,
-    status: "coming-soon",
-    plannedPhase: "Phase 3",
     howItWorks: [],
     faq: [],
     relatedToolIds: [],

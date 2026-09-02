@@ -24,6 +24,9 @@ accidental exfiltration at the browser level.
 | Extract text | No | No | No after first load | Optional metadata history |
 | Remove metadata | No | No | No after first load | Optional metadata history |
 | Fingerprint (SHA-256) | No | No | No after first load | Optional metadata history |
+| Encrypt / Remove password / Unlock permissions | No | No | No after first load | Optional metadata history only; passwords never persist |
+| Redact / Auto-redact PII | No | No | No after first load | Optional metadata history; marked text and PII never persist |
+| Privacy scanner / Sanitize | No | No | No after first load | Optional metadata history; findings are held in tab memory only |
 
 ## Analytics
 
@@ -45,3 +48,7 @@ Storage failures never break processing.
 - Future cloud-AI or P2P features must disclose exactly what leaves the device before
   first use — enforced as a product rule in the spec and registry schema
   (`remoteProcessingDisclosure`).
+- EXIF/GPS detection inside embedded JPEGs is best-effort. The scanner labels these
+  findings as not currently removable because the sanitizer does not rewrite images.
+- Auto-PII works on PDFs with an extractable text layer. Scanned documents need the
+  future local OCR engine before pattern detection can inspect them.
