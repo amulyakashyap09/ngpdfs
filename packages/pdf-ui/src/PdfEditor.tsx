@@ -34,6 +34,18 @@ export interface PdfEditorProps {
   initialSignature?: { ref: string; bytes: Uint8Array; type: "png" | "jpeg" } | null;
   onExport: (objects: EditorObject[], images: EditorImageSource[]) => void;
   exporting?: boolean;
+  ocrTextHits?: Record<number, EditorOcrHit[]>;
+}
+
+export interface EditorOcrHit {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  baseline: number;
+  text: string;
+  size: number;
+  confidence: number;
 }
 
 interface DragState {
@@ -67,6 +79,7 @@ export function PdfEditor({
   initialSignature,
   onExport,
   exporting,
+  ocrTextHits,
 }: PdfEditorProps) {
   const tools: EditorTool[] =
     allowedTools && allowedTools.length > 0
@@ -170,6 +183,17 @@ export function PdfEditor({
             size,
           });
         }
+        for (const hit of ocrTextHits?.[pageIndex + 1] ?? []) {
+          hits.push({
+            x: hit.x,
+            y: hit.y,
+            w: hit.width,
+            h: hit.height,
+            baseline: hit.baseline,
+            str: hit.text,
+            size: hit.size,
+          });
+        }
         setTextHits(hits);
       } catch {
         if (!cancelled) setTextHits([]);
@@ -178,7 +202,7 @@ export function PdfEditor({
     return () => {
       cancelled = true;
     };
-  }, [tool, pageIndex, file, pageDims]);
+  }, [tool, pageIndex, file, pageDims, ocrTextHits]);
 
   useEffect(() => {
     if (initialSignature && !images.has(initialSignature.ref)) {

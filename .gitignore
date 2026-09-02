@@ -1,5 +1,8 @@
 node_modules/
 .next/
+apps/web/public/ocr/
+playwright-report/
+test-results/
 dist/
 out/
 coverage/

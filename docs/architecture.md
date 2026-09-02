@@ -15,6 +15,8 @@ packages/pdf-security    encryption, authorized decryption, PII detection, priva
                          inspection/sanitizing, raster-redaction assembly/verification
 packages/pdf-compression preflight, pinned Ghostscript-WASM profiles, bounded targets,
                          output validation, worker protocol and browser client
+packages/pdf-ocr       Tesseract browser session, explicit languages, preprocessing,
+                       perspective scan math, searchable-layer assembly/client
 packages/pdf-core        file model, validation, pdfjs loader/renderer, WorkerPool,
                          IndexedDB, history, downloader, operation contract/runner
 packages/shared          errors, capabilities, memory math, parsing, analytics sanitizer
@@ -54,6 +56,11 @@ artifact and a synchronous native pass. It loads only from a compression route. 
 passes share one module within a job; cancellation's grace timeout terminates the worker
 if Ghostscript cannot cooperatively return.
 
+Tesseract.js owns a separate OCR worker so recognition never runs on React's thread.
+PDF.js rendering remains main-thread/canvas-bound and sequential; the transferable PDF
+worker performs invisible-text assembly. Cancelling terminates the OCR worker rather
+than waiting for a recognition job to return.
+
 ## Rendering path
 
 PDF.js runs on the main thread (canvas requirement) but is bounded:
@@ -80,8 +87,8 @@ preview matches export by construction.
 
 `public/sw.js`: precaches shell + `/pdf.worker.min.mjs`; runtime caches navigations;
 cache-first for hashed static chunks (including the compression worker and Ghostscript
-WASM after first use); old versions purged on activate. Registered only in production
-builds.
+WASM after first use) and `/ocr/` worker/core/language assets; old versions purged on
+activate. Registered only in production builds.
 
 ## Security headers
 

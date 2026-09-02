@@ -1,4 +1,4 @@
-const VERSION = "paperzero-v2";
+const VERSION = "paperzero-v3";
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 const OFFLINE_URL = "/offline.html";
@@ -46,9 +46,10 @@ self.addEventListener("fetch", (event) => {
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request)
-        .then((response) => {
+        .then(async (response) => {
           const copy = response.clone();
-          caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, copy));
+          const cache = await caches.open(RUNTIME_CACHE);
+          await cache.put(request, copy);
           return response;
         })
         .catch(async () => {
@@ -61,6 +62,7 @@ self.addEventListener("fetch", (event) => {
 
   if (
     url.pathname.startsWith("/_next/static/") ||
+    url.pathname.startsWith("/ocr/") ||
     url.pathname === "/pdf.worker.min.mjs" ||
     url.pathname === "/icon.svg" ||
     url.pathname === "/icon-maskable.svg"
@@ -68,10 +70,11 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       caches.match(request).then((cached) => {
         if (cached) return cached;
-        return fetch(request).then((response) => {
+        return fetch(request).then(async (response) => {
           if (response.ok) {
             const copy = response.clone();
-            caches.open(SHELL_CACHE).then((cache) => cache.put(request, copy));
+            const cache = await caches.open(SHELL_CACHE);
+            await cache.put(request, copy);
           }
           return response;
         });

@@ -14,6 +14,7 @@ const config = [
       "**/playwright-report/**",
       "**/test-results/**",
       "**/public/pdf.worker.min.mjs",
+      "**/public/ocr/**",
       "**/next-env.d.ts",
     ],
   },

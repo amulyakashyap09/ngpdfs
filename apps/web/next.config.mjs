@@ -22,15 +22,18 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
 ];
+
+const lockedPermissions = "camera=(), microphone=(), geolocation=(), interest-cohort=()";
+const scanPermissions = "camera=(self), microphone=(), geolocation=(), interest-cohort=()";
 
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: [
     "@paperzero/shared",
     "@paperzero/pdf-compression",
+    "@paperzero/pdf-ocr",
     "@paperzero/pdf-core",
     "@paperzero/pdf-operations",
     "@paperzero/pdf-ui",
@@ -50,7 +53,18 @@ const nextConfig = {
     return config;
   },
   async headers() {
-    return [{ source: "/(.*)", headers: securityHeaders }];
+    // When multiple rules match, Next applies the later value for the same key.
+    // Camera remains disabled everywhere except the explicit scanning route.
+    return [
+      {
+        source: "/:path*",
+        headers: [...securityHeaders, { key: "Permissions-Policy", value: lockedPermissions }],
+      },
+      {
+        source: "/scan-to-pdf",
+        headers: [{ key: "Permissions-Policy", value: scanPermissions }],
+      },
+    ];
   },
 };
 

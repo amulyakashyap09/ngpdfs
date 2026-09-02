@@ -28,6 +28,8 @@ accidental exfiltration at the browser level.
 | Redact / Auto-redact PII | No | No | No after first load | Optional metadata history; marked text and PII never persist |
 | Privacy scanner / Sanitize | No | No | No after first load | Optional metadata history; findings are held in tab memory only |
 | Compress / target-size compression | No | No | No after the engine's first load | Optional metadata history; PDF bytes remain in tab/worker memory only |
+| OCR / searchable PDF | No | No | No after selected model is cached | Language model in IndexedDB/cache; PDF pixels and text stay in tab/worker memory |
+| Scan to PDF | No | No | No after optional OCR model is cached | Captures remain in tab memory; optional metadata history only |
 
 ## Analytics
 
@@ -52,7 +54,11 @@ Storage failures never break processing.
 - EXIF/GPS detection inside embedded JPEGs is best-effort. The scanner labels these
   findings as not currently removable because the sanitizer does not rewrite images.
 - Auto-PII works on PDFs with an extractable text layer. Scanned documents need the
-  future local OCR engine before pattern detection can inspect them.
+  OCR PDF tool before pattern detection can inspect them.
 - Compression uses a self-hosted Ghostscript WebAssembly binary in a dedicated worker.
   Its hashed worker and WASM assets are cached after first use; PDFs are never placed in
   the service-worker cache.
+- Camera permission is requested only after the Scan to PDF user action. The response
+  policy permits camera requests only on `/scan-to-pdf`; every other route receives
+  `camera=()`. Denial leaves photo import available. Camera frames, crop geometry, OCR
+  text, and generated PDFs are not persisted by the service worker.

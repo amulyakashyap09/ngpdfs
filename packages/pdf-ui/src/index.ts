@@ -17,5 +17,6 @@ export {
   rgbToHex,
   hexToRgb01,
   type PdfEditorProps,
+  type EditorOcrHit,
 } from "./PdfEditor";
 export { SignatureModal, type SignatureResult } from "./SignatureModal";

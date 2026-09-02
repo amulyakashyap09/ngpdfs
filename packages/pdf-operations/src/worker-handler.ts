@@ -39,6 +39,7 @@ import {
   type SanitizeOptionsPayload,
   type RedactBuildPayload,
 } from "@paperzero/pdf-security";
+import { buildSearchablePdf, type SearchablePdfPayload } from "@paperzero/pdf-ocr/assembly";
 
 export interface WorkerTaskGuard {
   readonly cancelled: boolean;
@@ -145,6 +146,9 @@ const OPS: Record<string, OpHandler> = {
   },
   "redact-build": async (payload: RedactBuildPayload, guard) => {
     return await buildRedactedPdf(payload, guard);
+  },
+  "ocr-searchable-pdf": async (payload: SearchablePdfPayload, guard) => {
+    return await buildSearchablePdf(payload, guard);
   },
 };
 

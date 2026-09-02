@@ -1,0 +1,25 @@
+{
+  "name": "@paperzero/pdf-ocr",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./assembly": "./src/assembly.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cantoo/pdf-lib": "^2.4.0",
+    "@paperzero/pdf-core": "*",
+    "@paperzero/shared": "*",
+    "@tesseract.js-data/eng": "1.0.0",
+    "@tesseract.js-data/spa": "1.0.0",
+    "tesseract.js": "7.0.0"
+  },
+  "devDependencies": {
+    "@pdf-lib/upng": "1.0.1",
+    "pdfjs-dist": "^4.10.38"
+  }
+}

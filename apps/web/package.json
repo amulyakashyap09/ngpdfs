@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node ../../scripts/copy-pdf-worker.mjs && node ../../scripts/copy-ocr-assets.mjs && node ../../scripts/verify-ocr-assets.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@paperzero/pdf-compression": "*",
     "@paperzero/pdf-core": "*",
+    "@paperzero/pdf-ocr": "*",
     "@paperzero/pdf-operations": "*",
     "@paperzero/pdf-ui": "*",
     "@paperzero/shared": "*",

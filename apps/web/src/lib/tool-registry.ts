@@ -361,7 +361,7 @@ export const TOOLS: ToolDefinition[] = [
       {
         question: "My PDF is scanned and returns no text?",
         answer:
-          "Scanned pages are images without a text layer. OCR support (planned) will make those searchable.",
+          "Scanned pages are images without a text layer. Use OCR PDF to recognize them locally and create a searchable copy.",
       },
       {
         question: "Is reading order perfect for two-column papers?",
@@ -461,7 +461,7 @@ export const TOOLS: ToolDefinition[] = [
       {
         question: "Can I edit scanned pages?",
         answer:
-          "Scanned pages have no selectable text yet. OCR-assisted editing is planned; you can still whiteout and add text over them today.",
+          "Yes, with the OCR-assisted editing action. Recognized words become selectable regions, and edits use a disclosed whiteout-plus-text overlay rather than reconstructing hidden source content.",
       },
     ],
     relatedToolIds: ["watermark-pdf", "flatten-pdf", "crop-resize-pdf"],
@@ -699,9 +699,9 @@ export const TOOLS: ToolDefinition[] = [
     name: "Handwriting to PDF",
     shortDescription: "Combine note photos and scans into one PDF with optional transcription.",
     longDescription:
-      "Digitize handwritten notes: import photos or scanned PDFs, arrange them in order, and optionally append a typed transcription page. Automatic handwriting recognition arrives with our OCR engine - until then we label this workflow Beta honestly.",
+      "Digitize handwritten notes: import photos or scanned PDFs, arrange them, optionally append your own typed transcription, or run Beta local handwriting recognition to add searchable text while retaining every original page.",
     category: "edit",
-    outputTypes: ["pdf"],
+    outputTypes: ["pdf", "txt"],
     acceptedFileTypes: "application/pdf,image/jpeg,image/png,image/webp",
     tags: ["notes", "scan", "digitize", "transcription"],
     offlineCapable: true,
@@ -710,16 +710,17 @@ export const TOOLS: ToolDefinition[] = [
     howItWorks: [
       "Add scans (PDF) and/or photos of notes and arrange their order.",
       "Optionally write a typed transcription to append.",
-      "Build one combined PDF locally.",
+      "Optionally run Beta handwriting OCR and review confidence warnings.",
+      "Build one combined PDF locally, preserving the original handwritten pages.",
     ],
     faq: [
       {
         question: "Does it read my handwriting automatically?",
         answer:
-          "Not yet. Handwriting OCR ships with our OCR engine later; today you can attach a manually typed transcription page.",
+          "Optionally. Tesseract is optimized for printed text, so handwriting mode is Beta, reports low confidence, preserves the original scan, and also exports recognized text for manual correction.",
       },
     ],
-    relatedToolIds: ["images-to-pdf", "merge-pdf", "pdf-to-handwriting"],
+    relatedToolIds: ["scan-to-pdf", "ocr-pdf", "pdf-to-handwriting"],
   }),
 
   t({
@@ -882,7 +883,7 @@ export const TOOLS: ToolDefinition[] = [
       {
         question: "Can it miss things?",
         answer:
-          "Yes - detection covers common patterns only. Review carefully; scanned pages need OCR (planned) since they have no text layer.",
+          "Yes - detection covers common patterns only. Review carefully; run OCR PDF on scanned pages first because image-only pages have no text layer to inspect.",
       },
     ],
     relatedToolIds: ["redact-pdf", "privacy-scanner"],
@@ -1062,18 +1063,64 @@ export const TOOLS: ToolDefinition[] = [
     id: "ocr-pdf",
     slug: "ocr-pdf",
     name: "OCR PDF",
-    shortDescription: "Make scanned PDFs searchable with an invisible text layer.",
-    longDescription: "Run on-device OCR (Tesseract WASM) to add searchable text to scanned pages.",
+    shortDescription: "Make scanned PDFs searchable with private, on-device OCR.",
+    longDescription:
+      "Recognize English or Spanish text with Tesseract WebAssembly, skip pages that are already searchable, and add an aligned invisible text layer while preserving every original visual page. Review page confidence and export PDF, TXT, or Markdown without uploading the document.",
     category: "convert-from-pdf",
-    outputTypes: ["pdf", "txt"],
-    tags: ["searchable", "scan", "recognize text"],
+    acceptedFileTypes: "application/pdf,.pdf",
+    outputTypes: ["pdf", "txt", "md"],
+    tags: ["searchable", "scan", "recognize text", "tesseract", "offline ocr"],
     offlineCapable: true,
     remoteProcessingDisclosure: null,
-    status: "coming-soon",
-    plannedPhase: "Phase 5",
-    howItWorks: [],
-    faq: [],
-    relatedToolIds: [],
+    status: "available",
+    howItWorks: [
+      "Open a scanned or mixed PDF and choose pages and a recognition language.",
+      "PaperZero skips text-rich pages unless you explicitly force OCR.",
+      "Selected pages are rendered and preprocessed one at a time before local recognition.",
+      "An invisible text layer is aligned over the unchanged visual pages and verified before download.",
+    ],
+    faq: [
+      {
+        question: "Does OCR change how my PDF looks?",
+        answer: "No. Preprocessing is used only for recognition. The searchable PDF retains each original visual page and adds non-rendering text behind it.",
+      },
+      {
+        question: "Why are only English and Spanish available initially?",
+        answer: "Language models are several megabytes each. PaperZero starts with two explicitly pinned, self-hosted models instead of silently downloading a large catalog; more languages can be added after fixture validation.",
+      },
+      {
+        question: "Is handwriting recognition accurate?",
+        answer: "Tesseract is designed primarily for printed text. Handwriting recognition is labeled Beta and always preserves the original handwritten page for manual review.",
+      },
+    ],
+    relatedToolIds: ["scan-to-pdf", "extract-text", "handwriting-to-pdf"],
+  }),
+  t({
+    id: "scan-to-pdf",
+    slug: "scan-to-pdf",
+    name: "Scan to PDF",
+    shortDescription: "Capture or import document photos and correct them into a multi-page PDF.",
+    longDescription:
+      "Use an explicitly activated device camera or imported photos to build a local scan stack. Review every detected boundary, adjust four corners with touch-sized keyboard-accessible handles or numeric controls, apply perspective correction and enhancement, reorder pages, and optionally make the result searchable.",
+    category: "convert-to-pdf",
+    acceptedFileTypes: "image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp",
+    outputTypes: ["pdf", "txt"],
+    tags: ["camera", "document scanner", "perspective", "mobile scan", "searchable scan"],
+    offlineCapable: true,
+    remoteProcessingDisclosure: null,
+    status: "available",
+    howItWorks: [
+      "Start the camera explicitly or import existing document photos.",
+      "Review the suggested boundary and adjust all four corners for each page.",
+      "Reorder, rotate, and choose color, auto, grayscale, or black-and-white enhancement.",
+      "Export a multi-page PDF, optionally adding local OCR searchable text.",
+    ],
+    faq: [
+      { question: "When is camera permission requested?", answer: "Only after you press Start camera. If permission is unavailable or denied, photo import remains fully usable." },
+      { question: "Is automatic edge detection final?", answer: "No. It is a lightweight local suggestion and can be wrong. PaperZero always exposes all four corners for review and adjustment." },
+      { question: "Are captured pages uploaded?", answer: "No. Camera frames, crop coordinates, corrected images, OCR, and PDF assembly remain in browser memory." },
+    ],
+    relatedToolIds: ["ocr-pdf", "images-to-pdf", "handwriting-to-pdf"],
   }),
 ];
 

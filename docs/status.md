@@ -1,6 +1,6 @@
 # Parity status vs. spec (README(2).md)
 
-Status date: 2026-09-02
+Status date: 2026-09-03
 
 ## Phase 0 — Foundation: COMPLETE
 
@@ -57,7 +57,7 @@ Sitemap + robots generated from the registry.
 | Flatten | /flatten-pdf | form.flatten() after appearance generation | signature-field detection warning; annotation-rasterize & JS-strip honestly out of scope for this pass |
 | Invert Colors | /invert-colors | main-thread batched raster + pixel transforms | invert/grayscale/sepia/high-contrast/dark-reading; exact original page sizes preserved; rasterization disclosed |
 | PDF to Handwriting | /pdf-to-handwriting | canvas render w/ system handwriting fonts -> images-to-PDF | paper styles blank/ruled/grid/margin; deterministic jitter; anti-deception disclaimer |
-| Handwriting to PDF | /handwriting-to-pdf | merge of scans + normalized photos + typed transcription | Beta-labeled; real handwriting OCR deferred to Phase 5 |
+| Handwriting to PDF | /handwriting-to-pdf | merge plus optional Tesseract OCR | Original pages preserved; Beta handwriting confidence warnings; searchable PDF + TXT |
 
 Editor architecture: one canonical coordinate model (PDF pt <-> CSS px), serializable
 command objects ({text, whiteout, image, replace-text}), export = pure function over
@@ -98,9 +98,29 @@ reuse. Engine version/commits/integrity, AGPL/commercial-license release gate, c
 arguments, synthetic six-fixture benchmark, visual checks, mobile adaptations, and
 known limitations are recorded in `docs/compression-engine.md`.
 
+## Phase 5 — OCR & Scan: COMPLETE
+
+| Tool/integration | Route | Status |
+|---|---|---|
+| OCR / Searchable PDF | /ocr-pdf | Available: skip text-rich pages, page ranges, English/Spanish, preprocessing, aligned invisible layer, PDF/TXT/MD review |
+| Scan to PDF | /scan-to-pdf | Available: explicit camera action + photo fallback, boundary suggestion, four-corner perspective correction, enhancements, stack controls, opt-in OCR |
+| Handwriting OCR | /handwriting-to-pdf | Available as Beta: preserved original, confidence warnings, searchable layer and TXT |
+| Editor OCR hook | /edit-pdf | Available: scanned-word hit regions feed disclosed whiteout/text overlay editing |
+
+Engine: pinned Tesseract.js/core 7.0.0 (Apache-2.0), with pinned self-hosted English
+and Spanish models. Details, asset sizes, language policy, DPI/preprocessing, scan
+algorithm, mobile caps, verification, and limitations are in `docs/ocr-and-scan.md`.
+
+The production Playwright suite proves that camera access is not requested before the
+explicit button action, exercises successful fake-camera capture and denied-permission
+fallback, verifies camera is permitted only on the scan route, then warms the versioned
+service-worker caches and reloads `/ocr-pdf` with all six pinned OCR assets while the
+browser is offline. The eight-category synthetic OCR benchmark is implemented and
+recorded with explicit non-generalization warnings.
+
 ## Deliberately not built yet (per spec phase order)
 
-Phase 5 OCR/scan · Phase 6–7 office conversion ·
+Phase 6–7 office conversion ·
 Phase 8 compare/repair · Phase 9 AI · Phase 10 P2P/whiteboard · Phase 11 GST/POS ·
 Phase 12 workflow builder · Phase 13 SDK · Phase 14 hardening.
 
@@ -108,10 +128,11 @@ These appear as "coming soon" cards with planned phase labels — no dead links.
 
 ## Known limitations (honest)
 
-1. Playwright E2E suites are specified in the README but not included here; verification
-   is via 201 passing Vitest tests (including real Ghostscript-WASM/pdf-lib round-trips
-   and worker protocol tests), a dedicated six-fixture compression benchmark, and a production-
-   build smoke check of all routes.
+1. Automated verification comprises 210 passing Vitest tests (including real
+   Ghostscript-WASM, Tesseract, pdf-lib round-trips, and worker protocol tests), three
+   production Playwright tests, dedicated compression/OCR benchmarks, and an optimized
+   build check of all routes. Physical iOS and Android camera behavior still requires
+   release-device smoke testing.
 2. Extract-text reading order is a heuristic; complex multi-column layouts may need cleanup.
 3. Remove Metadata does not strip XMP packets (disclosed).
 4. Heavy rendering (PDF→image) runs on the main thread with yields rather than in a
