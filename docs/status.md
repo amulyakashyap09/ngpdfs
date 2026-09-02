@@ -84,9 +84,23 @@ round-trips incl. wrong-password mapping, Luhn/Verhoeff/PAN vectors, PII groupin
 scanner score improvement after sanitize, annotation/link/JS injection and removal,
 redact-build page-count preservation and verification logic.
 
+## Phase 4 — Compression & Performance: COMPLETE
+
+| Tool | Route | Engine | Notes |
+|---|---|---|---|
+| Compress PDF | /compress-pdf | Ghostscript 10.06.0 via pinned @okathira/ghostpdl-wasm 1.1.0 in dedicated worker | Light/Medium/Heavy, preflight risk analysis, larger-output guard, structural + sample-render validation |
+| Compress to ~100 KB | /compress-pdf-to-100kb | same engine and shared UI | Best-effort bounded target workflow; up to 4 passes desktop / 2 constrained device |
+| Compress to ~200 KB | /compress-pdf-to-200kb | same engine and shared UI | Unique route metadata/FAQ; smallest valid candidate retained |
+| Compress to ~2 MB | /compress-pdf-to-2mb | same engine and shared UI | Same honest target semantics; no guaranteed byte size |
+
+The 15.5 MB WASM artifact is self-hosted, route-lazy, and runtime-cached for offline
+reuse. Engine version/commits/integrity, AGPL/commercial-license release gate, complete
+arguments, synthetic six-fixture benchmark, visual checks, mobile adaptations, and
+known limitations are recorded in `docs/compression-engine.md`.
+
 ## Deliberately not built yet (per spec phase order)
 
-Phase 4 Ghostscript-WASM compression · Phase 5 OCR/scan · Phase 6–7 office conversion ·
+Phase 5 OCR/scan · Phase 6–7 office conversion ·
 Phase 8 compare/repair · Phase 9 AI · Phase 10 P2P/whiteboard · Phase 11 GST/POS ·
 Phase 12 workflow builder · Phase 13 SDK · Phase 14 hardening.
 
@@ -95,8 +109,9 @@ These appear as "coming soon" cards with planned phase labels — no dead links.
 ## Known limitations (honest)
 
 1. Playwright E2E suites are specified in the README but not included here; verification
-   is via 191 vitest tests (incl. real pdf-lib round-trips and the full worker protocol)
-   plus a production-build smoke check of all routes.
+   is via 201 passing Vitest tests (including real Ghostscript-WASM/pdf-lib round-trips
+   and worker protocol tests), a dedicated six-fixture compression benchmark, and a production-
+   build smoke check of all routes.
 2. Extract-text reading order is a heuristic; complex multi-column layouts may need cleanup.
 3. Remove Metadata does not strip XMP packets (disclosed).
 4. Heavy rendering (PDF→image) runs on the main thread with yields rather than in a
@@ -108,3 +123,6 @@ These appear as "coming soon" cards with planned phase labels — no dead links.
    terms split across separate glyph runs may need manual region marking.
 7. Embedded JPEG EXIF/GPS scanning is best-effort. Detection is reported, but the
    sanitizer does not yet rewrite embedded images and labels those findings non-removable.
+8. Compression is a lossy `pdfwrite` rewrite for image content and normally invalidates
+   existing digital signatures. Target sizes are best-effort. Public deployment must
+   clear the documented AGPL-3.0-or-later or commercial-license release gate.

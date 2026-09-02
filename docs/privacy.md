@@ -27,6 +27,7 @@ accidental exfiltration at the browser level.
 | Encrypt / Remove password / Unlock permissions | No | No | No after first load | Optional metadata history only; passwords never persist |
 | Redact / Auto-redact PII | No | No | No after first load | Optional metadata history; marked text and PII never persist |
 | Privacy scanner / Sanitize | No | No | No after first load | Optional metadata history; findings are held in tab memory only |
+| Compress / target-size compression | No | No | No after the engine's first load | Optional metadata history; PDF bytes remain in tab/worker memory only |
 
 ## Analytics
 
@@ -52,3 +53,6 @@ Storage failures never break processing.
   findings as not currently removable because the sanitizer does not rewrite images.
 - Auto-PII works on PDFs with an extractable text layer. Scanned documents need the
   future local OCR engine before pattern detection can inspect them.
+- Compression uses a self-hosted Ghostscript WebAssembly binary in a dedicated worker.
+  Its hashed worker and WASM assets are cached after first use; PDFs are never placed in
+  the service-worker cache.

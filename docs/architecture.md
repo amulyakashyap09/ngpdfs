@@ -7,11 +7,14 @@ apps/web (Next.js)
   pages = thin wrappers: metadata + <ToolPage> + tool client component
   lib/tool-registry.ts   single typed source of truth for tools, SEO, FAQ, related links
   src/workers/pdf.worker.ts  worker entry wiring the operations dispatch handler
+  src/workers/compression.worker.ts  isolated, lazy Ghostscript-WASM compression entry
 
 packages/pdf-ui      React components + hooks (useFileDocuments, useOperation)
 packages/pdf-operations  pure PDF functions (pdf-lib), worker handler, client facades
 packages/pdf-security    encryption, authorized decryption, PII detection, privacy
                          inspection/sanitizing, raster-redaction assembly/verification
+packages/pdf-compression preflight, pinned Ghostscript-WASM profiles, bounded targets,
+                         output validation, worker protocol and browser client
 packages/pdf-core        file model, validation, pdfjs loader/renderer, WorkerPool,
                          IndexedDB, history, downloader, operation contract/runner
 packages/shared          errors, capabilities, memory math, parsing, analytics sanitizer
@@ -46,6 +49,11 @@ MergeClient
 - Timeouts terminate stuck workers and reject with TIMEOUT.
 - `onerror` fails in-flight tasks and recreates the worker on next dispatch.
 
+Compression has its own one-worker pool because the engine carries a 15.5 MB WASM
+artifact and a synchronous native pass. It loads only from a compression route. Target
+passes share one module within a job; cancellation's grace timeout terminates the worker
+if Ghostscript cannot cooperatively return.
+
 ## Rendering path
 
 PDF.js runs on the main thread (canvas requirement) but is bounded:
@@ -71,8 +79,9 @@ preview matches export by construction.
 ## Offline / PWA
 
 `public/sw.js`: precaches shell + `/pdf.worker.min.mjs`; runtime caches navigations;
-cache-first for hashed static chunks; old versions purged on activate. Registered only
-in production builds.
+cache-first for hashed static chunks (including the compression worker and Ghostscript
+WASM after first use); old versions purged on activate. Registered only in production
+builds.
 
 ## Security headers
 

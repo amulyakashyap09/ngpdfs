@@ -1,0 +1,22 @@
+{
+  "name": "@paperzero/pdf-compression",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./worker": "./src/worker.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cantoo/pdf-lib": "^2.4.0",
+    "@okathira/ghostpdl-wasm": "1.1.0",
+    "@paperzero/pdf-core": "*",
+    "@paperzero/shared": "*"
+  },
+  "devDependencies": {
+    "@pdf-lib/upng": "1.0.1"
+  }
+}
