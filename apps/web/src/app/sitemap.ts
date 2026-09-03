@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { getAvailableTools } from "@/lib/tool-registry";
 import { absoluteUrl } from "@/lib/seo";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = ["", "/privacy", "/how-it-works", "/offline"].map((path) => ({
     url: absoluteUrl(path),
