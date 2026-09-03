@@ -77,10 +77,10 @@ export default function PrivacyPage() {
         Security measures
       </h2>
       <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-        <li>A strict Content Security Policy restricts scripts to this origin.</li>
+        <li>A strict Content Security Policy restricts scripts to this origin and the disclosed Bondin support widget.</li>
         <li>Documents are processed inside Web Workers with strict input validation.</li>
         <li>Embedded PDF JavaScript is never executed.</li>
-        <li>All processing assets are self-hosted; no third-party scripts run on tool pages.</li>
+        <li>All document-processing assets are self-hosted. The Bondin support widget never receives file names, document contents or extracted text.</li>
       </ul>
 
       <p className="mt-10 text-xs text-slate-400">
