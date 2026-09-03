@@ -139,16 +139,19 @@ export function Checkbox({
   label,
   checked,
   onChange,
+  disabled = false,
 }: {
   label: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
+  disabled?: boolean;
 }) {
   return (
-    <label className="flex min-h-[44px] items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+    <label className={`flex min-h-[44px] items-center gap-2 text-sm text-slate-700 dark:text-slate-200 ${disabled ? "cursor-not-allowed opacity-60" : ""}`}>
       <input
         type="checkbox"
         checked={checked}
+        disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
         className="h-5 w-5 rounded border-slate-300 accent-blue-600"
       />

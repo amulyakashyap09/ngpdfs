@@ -1,0 +1,21 @@
+{
+  "name": "@paperzero/pdf-extraction",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./worker": "./src/worker.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@paperzero/pdf-core": "*",
+    "@paperzero/shared": "*",
+    "jszip": "^3.10.1"
+  },
+  "peerDependencies": {
+    "pdfjs-dist": "^4.10.38"
+  }
+}

@@ -18,6 +18,8 @@ packages/pdf-compression preflight, pinned Ghostscript-WASM profiles, bounded ta
 packages/pdf-conversion safe HTML/Markdown/CSV/audio-transcript adapters, EPUB and
                         custom Office Open XML readers, portable document blocks,
                         shared pagination, PPTX slide drawing, compatibility reports
+packages/pdf-extraction positioned PDF.js text model, reading-order and semantic
+                        analysis, table confidence, DOCX/XLSX/PPTX/HTML/EPUB writers
 packages/pdf-ocr       Tesseract browser session, explicit languages, preprocessing,
                        perspective scan math, searchable-layer assembly/client
 packages/pdf-core        file model, validation, pdfjs loader/renderer, WorkerPool,
@@ -69,6 +71,14 @@ one shared portable-document paginator. PPTX uses the same worker but draws dire
 the source slide dimensions. HTML/XML parsers treat imported content as data: active
 elements and remote resources are removed, and macros are never evaluated. See
 `docs/conversion-to-pdf.md` for the complete fidelity matrix and safety limits.
+
+Phase 7 first extracts page-normalized PDF.js positions on the main thread, where
+PDF.js canvas and font APIs are available. `packages/pdf-extraction` converts those
+positions into ordered lines, semantic blocks, repeated-margin findings, links, and
+confidence-scored table candidates. Optional scan pages pass through the existing
+Tesseract session before the same analyzer runs again. Serializable analysis and any
+required page rasters then cross the existing transferable worker boundary to custom,
+validated Open XML/HTML/EPUB writers. See `docs/conversion-from-pdf.md`.
 
 ## Rendering path
 

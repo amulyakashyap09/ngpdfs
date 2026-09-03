@@ -42,6 +42,7 @@ import {
 import { buildSearchablePdf, type SearchablePdfPayload } from "@paperzero/pdf-ocr/assembly";
 import { convertBinaryToPdf, convertSourceToPdf } from "@paperzero/pdf-conversion/worker";
 import type { BinaryConversionPayload, ConversionPayload } from "@paperzero/pdf-conversion";
+import { buildPdfExport, type PdfExportPayload } from "@paperzero/pdf-extraction/worker";
 export type { WorkerDoneResult } from "./worker-types";
 
 export interface WorkerTaskGuard {
@@ -158,6 +159,9 @@ const OPS: Record<string, OpHandler> = {
   },
   "convert-binary-to-pdf": async (payload: BinaryConversionPayload, guard) => {
     return await convertBinaryToPdf(payload, guard);
+  },
+  "pdf-layout-export": async (payload: PdfExportPayload, guard) => {
+    return await buildPdfExport(payload, guard);
   },
 };
 

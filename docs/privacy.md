@@ -21,7 +21,9 @@ accidental exfiltration at the browser level.
 | Images to PDF | No | No | No after first load | Optional metadata history |
 | PDF to JPG/PNG/ZIP | No | No | No after first load | Optional metadata history |
 | Watermark / Page numbers | No | No | No after first load | Optional metadata history |
-| Extract text | No | No | No after first load | Optional metadata history |
+| Extract text / PDF to Word, Excel, HTML, EPUB | No | No | No after optional OCR model is cached | Optional metadata history; extracted text stays in tab/worker memory |
+| PDF to PowerPoint | No | No | No after first load | Optional metadata history; page rasters stay in tab/worker memory |
+| PDF to Audio | No | No; only browser voices marked local are offered | No after optional OCR model is cached | No audio or text persistence beyond optional metadata history |
 | Remove metadata | No | No | No after first load | Optional metadata history |
 | Fingerprint (SHA-256) | No | No | No after first load | Optional metadata history |
 | Encrypt / Remove password / Unlock permissions | No | No | No after first load | Optional metadata history only; passwords never persist |
@@ -69,3 +71,9 @@ Storage failures never break processing.
 - Audio Transcript to PDF deliberately ships the conservative manual-review fallback:
   it plays a local object URL, never contacts a cloud/browser speech service, and does
   not claim speaker diarization. Automatic on-device recognition is not bundled.
+- PDF to Audio uses `speechSynthesis` for listen-only playback and filters out every
+  voice not explicitly exposed with `localService === true`. Browsers that expose no
+  local voice get readable extracted text but no speech fallback and no fake MP3 export.
+- Phase 7 semantic conversions can optionally invoke the same self-hosted Tesseract
+  assets as OCR PDF. Generated HTML is script-free with a restrictive embedded CSP;
+  PDF JavaScript and active annotations are never copied into alternate formats.

@@ -6,9 +6,9 @@ PaperZero is a local-first, privacy-first PDF toolkit that runs entirely in the 
 Documents are opened, processed, rendered and validated on-device using Web Workers,
 pdf-lib and PDF.js — no uploads, no watermarks, no accounts.
 
-This repository currently implements **Phases 0–6** of the product roadmap in
+This repository currently implements **Phases 0–7** of the product roadmap in
 `README(2).md`: foundation, core tools, editing, security/privacy, compression,
-OCR/scanning, and browser-local conversion into PDF.
+OCR/scanning, and browser-local conversion into and out of PDF.
 
 ## Quick start
 
@@ -43,6 +43,8 @@ packages/
                            plus the worker dispatch handler
   pdf-conversion/          safe source/eBook/Office adapters, portable document model,
                            pagination, PPTX renderer, compatibility reporting
+  pdf-extraction/          positioned text/layout analysis, table confidence, local
+                           DOCX/XLSX/PPTX/HTML/EPUB writers and text export formats
   pdf-compression/         bounded Ghostscript-WASM compression and validation
   pdf-editor/              overlay editing, forms, crop/resize, rich PDF operations
   pdf-ocr/                 Tesseract sessions, preprocessing, scan geometry, assembly
@@ -67,13 +69,17 @@ scripts/copy-pdf-worker.mjs  pins the pdfjs worker asset for offline/self-hosted
 | `/pdf-to-zip` | All pages → numbered images in a ZIP |
 | `/watermark-pdf` | Text/image watermark with live placement preview |
 | `/add-page-numbers` | Header/footer numbering with formats `1`, `Page 1`, `1 / N` |
-| `/extract-text` | Page-separated text; copy, TXT and Markdown download |
+| `/extract-text` | Semantic/column-aware extraction; TXT, Markdown and positioned JSON |
 | `/remove-metadata` | Strip author/creator/dates etc. (basic cleaner, honestly labeled) |
 | `/pdf-fingerprint` | SHA-256 hash computed inside a Web Worker, with verify mode |
 | `/word-to-pdf`, `/excel-to-pdf`, `/powerpoint-to-pdf` | Local Office Open XML conversion with compatibility reports |
 | `/html-to-pdf`, `/markdown-to-pdf`, `/csv-to-pdf` | Safe source parsing through the shared paginator |
 | `/ebook-to-pdf`, `/audio-to-pdf` | Sanitized eBooks and conservative local transcript workflow |
 | `/create-pdf` | Rich-text composer with a browser-only draft |
+| `/pdf-to-word`, `/pdf-to-excel` | Editable DOCX reconstruction and reviewed table-to-XLSX export |
+| `/pdf-to-powerpoint` | Visual-fidelity PPTX with one flattened slide per PDF page |
+| `/pdf-to-html`, `/pdf-to-epub` | Semantic/layout HTML and reflowable EPUB 3 |
+| `/pdf-to-audio` | Read aloud with browser voices explicitly marked as local |
 
 Plus `/diagnostics/hash`, a developer route proving the transferable-worker pipeline.
 
@@ -92,7 +98,8 @@ fake links. See [docs/status.md](docs/status.md) for the exact parity matrix.
   installable manifest. Security headers ship from `next.config.mjs`.
 
 See [docs/architecture.md](docs/architecture.md), [docs/privacy.md](docs/privacy.md),
-and [docs/conversion-to-pdf.md](docs/conversion-to-pdf.md).
+and [docs/conversion-to-pdf.md](docs/conversion-to-pdf.md) plus
+[docs/conversion-from-pdf.md](docs/conversion-from-pdf.md).
 
 ## Testing
 
@@ -105,6 +112,6 @@ SHA-256 vectors, EXIF parsing, text-line grouping and the full worker dispatch p
 
 ## Roadmap
 
-Later phases of `README(2).md` (PDF-to-Office conversion, compare/repair, AI, P2P,
+Later phases of `README(2).md` (compare/repair, AI, P2P,
 GST tools, workflow builder, SDK, and hardening) plug into the operation contract and
 worker infrastructure defined here.

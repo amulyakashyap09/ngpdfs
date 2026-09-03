@@ -34,6 +34,7 @@ const nextConfig = {
     "@paperzero/shared",
     "@paperzero/pdf-compression",
     "@paperzero/pdf-conversion",
+    "@paperzero/pdf-extraction",
     "@paperzero/pdf-ocr",
     "@paperzero/pdf-core",
     "@paperzero/pdf-operations",

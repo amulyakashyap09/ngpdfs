@@ -145,9 +145,30 @@ Whisper model, weaken the self-only CSP for remote model downloads, call a cloud
 speech service, or claim diarization. Users can listen locally, edit reviewed text, and
 insert timestamps from the actual playback position.
 
+## Phase 7 — Convert from PDF: COMPLETE
+
+| Tool | Route | Status |
+|---|---|---|
+| PDF to Word | /pdf-to-word | Flowing editable DOCX with headings, paragraphs, lists, selected page breaks, confident tables, and integrated local OCR |
+| PDF to Excel | /pdf-to-excel | Table-only detection, confidence explanations, preview/selection gate, and one XLSX worksheet per approved table |
+| PDF to PowerPoint | /pdf-to-powerpoint | Required visual-fidelity mode: one contained page raster per slide; element editing explicitly unavailable |
+| PDF to HTML | /pdf-to-html | Script-free semantic reflow or positioned-layout HTML with embedded restrictive CSP |
+| PDF to EPUB | /pdf-to-epub | EPUB 3 package, navigation document, semantic XHTML chapters, selectable page grouping |
+| PDF to Audio | /pdf-to-audio | Listen-only browser SpeechSynthesis using only voices reported as local; no downloadable-audio claim |
+| Extract Text v2 | /extract-text | Paragraphs/headings/lists/tables, column order, repeated-margin removal, OCR, TXT/MD/JSON+bbox |
+| PDF to JPG/PNG | /pdf-to-jpg | Existing Phase 1 renderer already supplies page selection, format, quality/DPI, and device-aware bounds |
+
+All semantic routes share `packages/pdf-extraction`: positioned PDF.js items are
+normalized into rows, lines, columns, blocks, and table candidates. Table confidence
+combines boundary alignment, column-count consistency, row density, emphasized headers,
+and numeric-cell evidence; candidates under 68% cannot be exported to Excel. Custom
+DOCX/XLSX/PPTX packages are reopened and checked for required Open XML parts, EPUB is
+checked for its mimetype/container/package/navigation/chapters, and HTML is checked for
+inert output. Format choices, test fixtures, fidelity gaps, and license inventory are in
+`docs/conversion-from-pdf.md`.
+
 ## Deliberately not built yet (per spec phase order)
 
-Phase 7 PDF-to-Office conversion ·
 Phase 8 compare/repair · Phase 9 AI · Phase 10 P2P/whiteboard · Phase 11 GST/POS ·
 Phase 12 workflow builder · Phase 13 SDK · Phase 14 hardening.
 
@@ -155,12 +176,14 @@ These appear as "coming soon" cards with planned phase labels — no dead links.
 
 ## Known limitations (honest)
 
-1. Automated verification comprises 220 passing Vitest tests (including real
-   Ghostscript-WASM, Tesseract, pdf-lib round-trips, and worker protocol tests), four
+1. Automated verification comprises 228 passing Vitest tests (including real
+   Ghostscript-WASM, Tesseract, pdf-lib/package round-trips, and worker protocol tests), five
    production Playwright tests, dedicated compression/OCR benchmarks, and an optimized
    build check of all routes. Physical iOS and Android camera behavior still requires
    release-device smoke testing.
-2. Extract-text reading order is a heuristic; complex multi-column layouts may need cleanup.
+2. Phase 7 reading order and table reconstruction are heuristic; complex layouts,
+   equations, irregular tables, and OCR results need review. DOCX prioritizes reflow,
+   PPTX is flattened, and EPUB pagination intentionally differs from PDF pagination.
 3. Remove Metadata does not strip XMP packets (disclosed).
 4. Heavy rendering (PDF→image) runs on the main thread with yields rather than in a
    worker (OffscreenCanvas path is future work); DPI clamps keep it within budget.
