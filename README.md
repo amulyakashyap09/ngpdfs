@@ -8,10 +8,8 @@ pdf-lib and PDF.js — no uploads, no watermarks, no accounts.
 
 ## Donate ❤️
 
-[Support me on Bondin](https://bondin.io/amulya/support)
+[![Support This Project](https://img.shields.io/badge/Support%20me-bondin.io-blue?style=for-the-badge)](https://bondin.io/amulya/support)
 
-<script async src="https://bondin.io/embed/v1.js"></script>
-<bondin-support username="amulya" label="Support me"></bondin-support>
 
 GitHub sanitizes executable scripts in rendered README files, so the direct link above
 remains the reliable repository-page fallback. The same widget is active on PaperZero's
