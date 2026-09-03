@@ -6,6 +6,17 @@ PaperZero is a local-first, privacy-first PDF toolkit that runs entirely in the 
 Documents are opened, processed, rendered and validated on-device using Web Workers,
 pdf-lib and PDF.js — no uploads, no watermarks, no accounts.
 
+## Donate ❤️
+
+[Support me on Bondin](https://bondin.io/amulya/support)
+
+<script async src="https://bondin.io/embed/v1.js"></script>
+<bondin-support username="amulya" label="Support me"></bondin-support>
+
+GitHub sanitizes executable scripts in rendered README files, so the direct link above
+remains the reliable repository-page fallback. The same widget is active on PaperZero's
+main application page.
+
 This repository currently implements **Phases 0–7** of the product roadmap in
 `README(2).md`: foundation, core tools, editing, security/privacy, compression,
 OCR/scanning, and browser-local conversion into and out of PDF.

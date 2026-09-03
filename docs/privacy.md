@@ -13,6 +13,13 @@ PDF bytes -> browser memory -> local engine -> validated output -> download
 There is no upload endpoint in this codebase. `connect-src 'self'` in the CSP blocks any
 accidental exfiltration at the browser level.
 
+The homepage has one explicit exception for project sponsorship: it loads the Bondin
+support web component from `https://bondin.io`. The homepage CSP permits only that exact
+script and frame origin; PDF tool routes retain the self-only script policy and block all
+frames. The current widget opens its cross-origin checkout frame after user interaction.
+No PDF/document bytes are present in the widget integration or sent to Bondin, although
+normal request metadata such as IP address and user agent is visible to that third party.
+
 ## Per-tool data flow matrix
 
 | Tool | File uploaded? | Content to third party? | Internet required? | Local persistence |
