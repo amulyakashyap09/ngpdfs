@@ -15,6 +15,9 @@ packages/pdf-security    encryption, authorized decryption, PII detection, priva
                          inspection/sanitizing, raster-redaction assembly/verification
 packages/pdf-compression preflight, pinned Ghostscript-WASM profiles, bounded targets,
                          output validation, worker protocol and browser client
+packages/pdf-conversion safe HTML/Markdown/CSV/audio-transcript adapters, EPUB and
+                        custom Office Open XML readers, portable document blocks,
+                        shared pagination, PPTX slide drawing, compatibility reports
 packages/pdf-ocr       Tesseract browser session, explicit languages, preprocessing,
                        perspective scan math, searchable-layer assembly/client
 packages/pdf-core        file model, validation, pdfjs loader/renderer, WorkerPool,
@@ -60,6 +63,12 @@ Tesseract.js owns a separate OCR worker so recognition never runs on React's thr
 PDF.js rendering remains main-thread/canvas-bound and sequential; the transferable PDF
 worker performs invisible-text assembly. Cancelling terminates the OCR worker rather
 than waiting for a recognition job to return.
+
+Phase 6 source/EPUB/DOCX/XLSX conversion runs in the transferable PDF worker through
+one shared portable-document paginator. PPTX uses the same worker but draws directly at
+the source slide dimensions. HTML/XML parsers treat imported content as data: active
+elements and remote resources are removed, and macros are never evaluated. See
+`docs/conversion-to-pdf.md` for the complete fidelity matrix and safety limits.
 
 ## Rendering path
 

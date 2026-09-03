@@ -6,8 +6,9 @@ PaperZero is a local-first, privacy-first PDF toolkit that runs entirely in the 
 Documents are opened, processed, rendered and validated on-device using Web Workers,
 pdf-lib and PDF.js — no uploads, no watermarks, no accounts.
 
-This repository currently implements **Phase 0 (platform foundation) + Phase 1 (core MVP tools)**
-of the product roadmap in `README(2).md`, which corresponds to the spec's *Milestone 2 — Public MVP*.
+This repository currently implements **Phases 0–6** of the product roadmap in
+`README(2).md`: foundation, core tools, editing, security/privacy, compression,
+OCR/scanning, and browser-local conversion into PDF.
 
 ## Quick start
 
@@ -21,7 +22,7 @@ Other commands:
 ```bash
 npm run build      # production build (statically prerendered)
 npm run start      # serve the production build
-npm run test       # vitest unit + integration suite (134 tests)
+npm run test       # Vitest unit + integration suite
 npm run lint       # eslint (flat config)
 npm run typecheck  # strict TypeScript across all workspaces
 ```
@@ -40,6 +41,12 @@ packages/
   pdf-operations/          merge / split / organize / rotate / watermark / page numbers /
                            images-to-PDF / extract-text / remove-metadata / zip / sha256,
                            plus the worker dispatch handler
+  pdf-conversion/          safe source/eBook/Office adapters, portable document model,
+                           pagination, PPTX renderer, compatibility reporting
+  pdf-compression/         bounded Ghostscript-WASM compression and validation
+  pdf-editor/              overlay editing, forms, crop/resize, rich PDF operations
+  pdf-ocr/                 Tesseract sessions, preprocessing, scan geometry, assembly
+  pdf-security/            encryption, authorized unlock, redaction, privacy scanning
   pdf-ui/                  FileDropzone, FileCardList, PageThumbnail, PageGrid, progress,
                            download result, live preview, tool page layout, hooks
 tests/                     (fixtures are co-located per package under src/*.test.ts)
@@ -63,11 +70,15 @@ scripts/copy-pdf-worker.mjs  pins the pdfjs worker asset for offline/self-hosted
 | `/extract-text` | Page-separated text; copy, TXT and Markdown download |
 | `/remove-metadata` | Strip author/creator/dates etc. (basic cleaner, honestly labeled) |
 | `/pdf-fingerprint` | SHA-256 hash computed inside a Web Worker, with verify mode |
+| `/word-to-pdf`, `/excel-to-pdf`, `/powerpoint-to-pdf` | Local Office Open XML conversion with compatibility reports |
+| `/html-to-pdf`, `/markdown-to-pdf`, `/csv-to-pdf` | Safe source parsing through the shared paginator |
+| `/ebook-to-pdf`, `/audio-to-pdf` | Sanitized eBooks and conservative local transcript workflow |
+| `/create-pdf` | Rich-text composer with a browser-only draft |
 
 Plus `/diagnostics/hash`, a developer route proving the transferable-worker pipeline.
 
-Coming-soon tools (compress, encrypt, redact, OCR, edit, sign …) are listed in the home
-catalog with their planned phase and no route yet — no fake links.
+Later-phase tools remain listed in the home catalog with their planned phase and no
+fake links. See [docs/status.md](docs/status.md) for the exact parity matrix.
 
 ## Architecture principles
 
@@ -80,7 +91,8 @@ catalog with their planned phase and no route yet — no fake links.
 - **PWA**: versioned service worker caches the app shell + engines; offline fallback page;
   installable manifest. Security headers ship from `next.config.mjs`.
 
-See [docs/architecture.md](docs/architecture.md) and [docs/privacy.md](docs/privacy.md).
+See [docs/architecture.md](docs/architecture.md), [docs/privacy.md](docs/privacy.md),
+and [docs/conversion-to-pdf.md](docs/conversion-to-pdf.md).
 
 ## Testing
 
@@ -93,6 +105,6 @@ SHA-256 vectors, EXIF parsing, text-line grouping and the full worker dispatch p
 
 ## Roadmap
 
-Later phases of `README(2).md` (editor, encryption/redaction, Ghostscript-WASM compression,
-OCR/scan, office conversion, compare/repair, AI, P2P, GST tools, workflow builder, SDK)
-plug into the operation contract and worker infrastructure defined here.
+Later phases of `README(2).md` (PDF-to-Office conversion, compare/repair, AI, P2P,
+GST tools, workflow builder, SDK, and hardening) plug into the operation contract and
+worker infrastructure defined here.

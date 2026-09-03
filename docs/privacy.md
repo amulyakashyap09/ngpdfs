@@ -30,6 +30,10 @@ accidental exfiltration at the browser level.
 | Compress / target-size compression | No | No | No after the engine's first load | Optional metadata history; PDF bytes remain in tab/worker memory only |
 | OCR / searchable PDF | No | No | No after selected model is cached | Language model in IndexedDB/cache; PDF pixels and text stay in tab/worker memory |
 | Scan to PDF | No | No | No after optional OCR model is cached | Captures remain in tab memory; optional metadata history only |
+| Word / Excel / PowerPoint to PDF | No | No | No after first load | Office bytes and extracted media stay in tab/worker memory only |
+| HTML / Markdown / CSV / eBook to PDF | No | No | No after first load | Source stays in tab/worker memory; remote resources are blocked |
+| Create PDF | No | No | No after first load | Draft HTML in this browser's localStorage; clearable in the editor |
+| Audio Transcript to PDF | No | No | No after first load | Audio object URL and transcript stay in the tab; no speech API/model cache |
 
 ## Analytics
 
@@ -62,3 +66,6 @@ Storage failures never break processing.
   policy permits camera requests only on `/scan-to-pdf`; every other route receives
   `camera=()`. Denial leaves photo import available. Camera frames, crop geometry, OCR
   text, and generated PDFs are not persisted by the service worker.
+- Audio Transcript to PDF deliberately ships the conservative manual-review fallback:
+  it plays a local object URL, never contacts a cloud/browser speech service, and does
+  not claim speaker diarization. Automatic on-device recognition is not bundled.

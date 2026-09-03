@@ -1,4 +1,4 @@
-import { createWorkerHandler, type PdfWorkerMessage } from "@paperzero/pdf-operations";
+import { createWorkerHandler, type PdfWorkerMessage } from "@paperzero/pdf-operations/worker";
 import type { WorkerResponse } from "@paperzero/pdf-core";
 
 const post = (

@@ -40,6 +40,9 @@ import {
   type RedactBuildPayload,
 } from "@paperzero/pdf-security";
 import { buildSearchablePdf, type SearchablePdfPayload } from "@paperzero/pdf-ocr/assembly";
+import { convertBinaryToPdf, convertSourceToPdf } from "@paperzero/pdf-conversion/worker";
+import type { BinaryConversionPayload, ConversionPayload } from "@paperzero/pdf-conversion";
+export type { WorkerDoneResult } from "./worker-types";
 
 export interface WorkerTaskGuard {
   readonly cancelled: boolean;
@@ -150,6 +153,12 @@ const OPS: Record<string, OpHandler> = {
   "ocr-searchable-pdf": async (payload: SearchablePdfPayload, guard) => {
     return await buildSearchablePdf(payload, guard);
   },
+  "convert-source-to-pdf": async (payload: ConversionPayload, guard) => {
+    return await convertSourceToPdf(payload, guard);
+  },
+  "convert-binary-to-pdf": async (payload: BinaryConversionPayload, guard) => {
+    return await convertBinaryToPdf(payload, guard);
+  },
 };
 
 export type PostMessageFn = (
@@ -224,9 +233,4 @@ function collectTransferables(files: Array<{ name: string; bytes: Uint8Array }>)
     }
   }
   return [...set];
-}
-
-export interface WorkerDoneResult {
-  files: Array<{ name: string; bytes: Uint8Array }>;
-  warnings: string[];
 }

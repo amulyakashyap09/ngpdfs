@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@paperzero/pdf-compression": "*",
+    "@paperzero/pdf-conversion": "*",
     "@paperzero/pdf-core": "*",
     "@paperzero/pdf-ocr": "*",
     "@paperzero/pdf-operations": "*",

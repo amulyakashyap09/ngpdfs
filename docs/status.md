@@ -118,9 +118,36 @@ service-worker caches and reloads `/ocr-pdf` with all six pinned OCR assets whil
 browser is offline. The eight-category synthetic OCR benchmark is implemented and
 recorded with explicit non-generalization warnings.
 
+## Phase 6 — Convert into PDF: COMPLETE WITH DISCLOSED AUDIO FALLBACK
+
+| Tool | Route | Status |
+|---|---|---|
+| Word to PDF | /word-to-pdf | DOCX Open XML parser; core blocks/media with compatibility report |
+| Excel to PDF | /excel-to-pdf | XLSX/XLSM displayed values and selected sheets; VBA never runs |
+| PowerPoint to PDF | /powerpoint-to-pdf | PPTX slide-sized pages with text/shapes/images/theme colors |
+| Images to PDF | /images-to-pdf | Phase 1 implementation already satisfies local normalization, EXIF, sizing, and canvas bounds |
+| HTML to PDF | /html-to-pdf | Inert parser; scripts, frames, event handlers, and network resources blocked |
+| Markdown to PDF | /markdown-to-pdf | Safe token pipeline, structural preview, themes, tables/code/page breaks |
+| CSV to PDF | /csv-to-pdf | Encoding/delimiter controls, row limits, repeated headers, horizontal pagination |
+| eBook to PDF | /ebook-to-pdf | EPUB/TXT/HTML, spine order, sanitized chapters, local images |
+| Audio Transcript to PDF | /audio-to-pdf | Local audio player + editable transcript + real playback timestamps; automatic ASR not bundled and no cloud fallback |
+| Create PDF | /create-pdf | Browser-local rich-text composer, local draft, safe shared export pipeline |
+
+Text-like formats share `packages/pdf-conversion`'s portable-document paginator in the
+PDF worker; PPTX retains its source slide dimensions through a dedicated direct renderer.
+Every route reports preserved, approximated, and omitted features and every PDF is
+reopened before download. Exact format support, safety limits, pinned parser versions,
+license choices, fixture coverage, and known fidelity gaps are in
+`docs/conversion-to-pdf.md`.
+
+The audio route uses the spec's conservative fallback: it does not ship a roughly 100 MB
+Whisper model, weaken the self-only CSP for remote model downloads, call a cloud/browser
+speech service, or claim diarization. Users can listen locally, edit reviewed text, and
+insert timestamps from the actual playback position.
+
 ## Deliberately not built yet (per spec phase order)
 
-Phase 6–7 office conversion ·
+Phase 7 PDF-to-Office conversion ·
 Phase 8 compare/repair · Phase 9 AI · Phase 10 P2P/whiteboard · Phase 11 GST/POS ·
 Phase 12 workflow builder · Phase 13 SDK · Phase 14 hardening.
 
@@ -128,8 +155,8 @@ These appear as "coming soon" cards with planned phase labels — no dead links.
 
 ## Known limitations (honest)
 
-1. Automated verification comprises 210 passing Vitest tests (including real
-   Ghostscript-WASM, Tesseract, pdf-lib round-trips, and worker protocol tests), three
+1. Automated verification comprises 220 passing Vitest tests (including real
+   Ghostscript-WASM, Tesseract, pdf-lib round-trips, and worker protocol tests), four
    production Playwright tests, dedicated compression/OCR benchmarks, and an optimized
    build check of all routes. Physical iOS and Android camera behavior still requires
    release-device smoke testing.

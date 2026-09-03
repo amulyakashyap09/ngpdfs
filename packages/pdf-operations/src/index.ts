@@ -4,7 +4,7 @@ export * from "./text-lines";
 export * from "./exif";
 export * from "./zip";
 export * from "./hash";
-export * from "./worker-handler";
+export * from "./worker-types";
 export * from "./client";
 export * from "./extract-text";
 export { readBasicMetadata, stripBasicMetadata, type BasicMetadata } from "./ops/metadata";

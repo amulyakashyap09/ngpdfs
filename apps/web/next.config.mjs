@@ -33,6 +33,7 @@ const nextConfig = {
   transpilePackages: [
     "@paperzero/shared",
     "@paperzero/pdf-compression",
+    "@paperzero/pdf-conversion",
     "@paperzero/pdf-ocr",
     "@paperzero/pdf-core",
     "@paperzero/pdf-operations",

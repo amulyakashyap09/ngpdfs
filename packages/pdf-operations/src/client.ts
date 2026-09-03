@@ -5,7 +5,7 @@ import type { PageRangeSegment } from "@paperzero/shared";
 import type { NinePosition } from "./positions";
 import type { PageNumberAlign, PageNumberFormat, PageNumberPosition } from "./ops/pagenumbers";
 import type { ImagesToPdfOptionsPayload } from "./ops/imagestopdf";
-import type { WorkerDoneResult } from "./worker-handler";
+import type { WorkerDoneResult } from "./worker-types";
 import type {
   EditorObject as EditorObjectDTO,
   EditorImageSource as EditorImageSourceDTO,
