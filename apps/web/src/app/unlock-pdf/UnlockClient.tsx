@@ -79,7 +79,7 @@ export function UnlockClient() {
         <strong>Processed locally in your browser.</strong>{" "}
         This tool removes <strong>permission restrictions</strong> (blocked printing/copying/editing
         flags) from documents you are authorized to modify. If the file itself requires a password to
-        open, you will be asked for it — PaperZero never cracks unknown passwords.
+        open, you will be asked for it — NGPDFs never cracks unknown passwords.
         Rebuilding a signed PDF normally invalidates its existing cryptographic signatures.
       </p>
 

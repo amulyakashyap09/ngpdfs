@@ -10,15 +10,15 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
-        <Link href="/" className="flex items-center gap-2" aria-label="PaperZero home">
+        <Link href="/" className="flex items-center gap-2" aria-label="NGPDFs home">
           <span
             aria-hidden="true"
             className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 font-black text-white"
           >
-            0
+            NG
           </span>
           <span className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">
-            Paper<span className="text-blue-600">Zero</span>
+            NG<span className="text-blue-600">PDFs</span>
           </span>
         </Link>
 

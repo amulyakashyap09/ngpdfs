@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How PaperZero Works",
+  title: "How NGPDFs Works",
   description:
     "The engineering behind local-first PDF processing: File API, Web Workers, PDF.js, pdf-lib and offline caching.",
   alternates: { canonical: "/how-it-works" },
@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 export default function HowItWorksPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-4 pb-20 pt-10">
-      <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">How PaperZero works</h1>
+      <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">How NGPDFs works</h1>
       <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-        PaperZero turns your browser into a document workshop. Here is the journey a file takes -
+        NGPDFs turns your browser into a document workshop. Here is the journey a file takes -
         and how short that journey is compared to traditional online converters.
       </p>
 

@@ -1,4 +1,4 @@
-const VERSION = "paperzero-v3";
+const VERSION = "ngpdfs-v1";
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 const OFFLINE_URL = "/offline.html";

@@ -13,8 +13,8 @@ export function Footer() {
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 md:grid-cols-4">
         <div>
           <p className="flex items-center gap-2 text-base font-extrabold text-slate-900 dark:text-white">
-            <span aria-hidden="true" className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 font-black text-white">0</span>
-            Paper<span className="-ml-1.5 text-blue-600">Zero</span>
+            <span aria-hidden="true" className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-xs font-black text-white">NG</span>
+            NG<span className="-ml-1.5 text-blue-600">PDFs</span>
           </p>
           <p className="mt-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
             PDF tools that never see your PDFs.
@@ -44,7 +44,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-slate-200 py-4 text-center text-xs text-slate-400 dark:border-slate-800">
-        © {new Date().getFullYear()} PaperZero. Runs locally in your browser.
+        © {new Date().getFullYear()} NGPDFs. Runs locally in your browser.
       </div>
     </footer>
   );

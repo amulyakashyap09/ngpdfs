@@ -1,8 +1,8 @@
-# PaperZero
+# NGPDFs
 
 > PDF tools that never see your PDFs.
 
-PaperZero is a local-first, privacy-first PDF toolkit that runs entirely in the browser.
+NGPDFs is a local-first, privacy-first PDF toolkit available at [ngpdfs.com](https://ngpdfs.com). It runs entirely in the browser.
 Documents are opened, processed, rendered and validated on-device using Web Workers,
 pdf-lib and PDF.js — no uploads, no watermarks, no accounts.
 
@@ -12,7 +12,7 @@ pdf-lib and PDF.js — no uploads, no watermarks, no accounts.
 
 
 GitHub sanitizes executable scripts in rendered README files, so the direct link above
-remains the reliable repository-page fallback. PaperZero also shows the Bondin support
+remains the reliable repository-page fallback. NGPDFs also shows the Bondin support
 widget as a floating button on every application page.
 
 This repository currently implements **Phases 0–7** of the product roadmap in

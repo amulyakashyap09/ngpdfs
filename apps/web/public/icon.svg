@@ -2,5 +2,5 @@
   <rect width="128" height="128" rx="28" fill="#2563eb"/>
   <path d="M40 30h34l18 18v50a6 6 0 0 1-6 6H40a6 6 0 0 1-6-6V36a6 6 0 0 1 6-6z" fill="#ffffff"/>
   <path d="M74 30l18 18H74z" fill="#bfdbfe"/>
-  <text x="64" y="92" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="900" fill="#2563eb" text-anchor="middle">0</text>
+  <text x="64" y="88" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="900" fill="#2563eb" text-anchor="middle">NG</text>
 </svg>

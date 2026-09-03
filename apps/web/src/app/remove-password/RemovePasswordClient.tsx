@@ -36,7 +36,7 @@ export function RemovePasswordClient() {
     <div className="flex flex-col gap-6">
       <p className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
         <strong>Processed locally in your browser.</strong>{" "}
-        You must know the document password — PaperZero does not crack passwords. Decryption
+        You must know the document password — NGPDFs does not crack passwords. Decryption
         happens entirely on this device and the password is never sent anywhere or stored.
         Removing protection from a signed PDF normally invalidates its existing cryptographic signatures.
       </p>

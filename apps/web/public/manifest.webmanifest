@@ -1,6 +1,6 @@
 {
-  "name": "PaperZero - Local PDF Tools",
-  "short_name": "PaperZero",
+  "name": "NGPDFs - Local PDF Tools",
+  "short_name": "NGPDFs",
   "description": "PDF tools that never see your PDFs. Merge, split, convert and protect documents entirely in your browser.",
   "start_url": "/",
   "scope": "/",

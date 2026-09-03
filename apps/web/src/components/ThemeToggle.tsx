@@ -15,7 +15,7 @@ export function ThemeToggle() {
     setTheme(next);
     document.documentElement.classList.toggle("dark", next === "dark");
     try {
-      localStorage.setItem("pz.theme", next);
+      localStorage.setItem("ngpdfs.theme", next);
     } catch {
       void 0;
     }

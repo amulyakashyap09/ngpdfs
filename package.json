@@ -1,8 +1,8 @@
 {
-  "name": "paperzero",
+  "name": "ngpdfs",
   "private": true,
   "version": "0.1.0",
-  "description": "PaperZero - PDF tools that never see your PDFs. Local-first, privacy-first browser document toolkit.",
+  "description": "NGPDFs - PDF tools that never see your PDFs. Local-first, privacy-first browser document toolkit.",
   "license": "UNLICENSED",
   "privateWorkspaces": true,
   "workspaces": [

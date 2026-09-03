@@ -162,7 +162,7 @@ export function SourceToPdfClient({ config }: { config: ConverterConfig }) {
           <DownloadResult toolId={`${config.format}-to-pdf`} files={operation.result.files} warnings={operation.warnings} onStartOver={() => operation.reset()} />
         </>
       ) : null}
-      <p className="text-xs text-slate-500">Conversion runs in PaperZero’s PDF worker. Scripts, macros, frames, and external resource loading are never executed.</p>
+      <p className="text-xs text-slate-500">Conversion runs in NGPDFs’ PDF worker. Scripts, macros, frames, and external resource loading are never executed.</p>
     </div>
   );
 }

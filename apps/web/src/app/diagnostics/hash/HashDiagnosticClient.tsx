@@ -19,7 +19,7 @@ export function HashDiagnosticClient() {
   return (
     <div className="flex flex-col gap-6">
       <p className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-        This developer diagnostic proves the PaperZero worker architecture end-to-end: a file is read locally,
+        This developer diagnostic proves the NGPDFs worker architecture end-to-end: a file is read locally,
         its bytes are transferred to a Web Worker with zero copies retained on the main thread, and a SHA-256
         digest is computed and returned. No network request carries file data.
       </p>

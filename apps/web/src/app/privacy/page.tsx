@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy",
   description:
-    "How PaperZero handles your documents: local-first processing, no uploads, no tracking of file content.",
+    "How NGPDFs handles your documents: local-first processing, no uploads, no tracking of file content.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -20,9 +20,9 @@ const MATRIX: Array<[string, string, string, string]> = [
 export default function PrivacyPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-4 pb-20 pt-10">
-      <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Privacy at PaperZero</h1>
+      <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Privacy at NGPDFs</h1>
       <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-        PaperZero is built privacy-first by architecture, not by policy. For every standard tool,
+        NGPDFs is built privacy-first by architecture, not by policy. For every standard tool,
         your document is opened, processed and rendered entirely inside your own browser tab.
         There is no upload step to trust, because there is no server receiving your files.
       </p>
@@ -84,7 +84,7 @@ export default function PrivacyPage() {
       </ul>
 
       <p className="mt-10 text-xs text-slate-400">
-        This page describes the current PaperZero release. Features under active development may
+        This page describes the current NGPDFs release. Features under active development may
         update these guarantees, and any change will be documented here before launch.
       </p>
     </div>

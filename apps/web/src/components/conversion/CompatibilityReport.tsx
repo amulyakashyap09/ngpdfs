@@ -11,7 +11,7 @@ export function CompatibilityReport({ report }: { report: Report }) {
   return (
     <section className="rounded-xl border border-slate-200 p-4 dark:border-slate-700" aria-label="Compatibility report">
       <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Compatibility report</h2>
-      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">PaperZero reports what this browser-local renderer can reproduce; it does not claim pixel-perfect source pagination.</p>
+      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">NGPDFs reports what this browser-local renderer can reproduce; it does not claim pixel-perfect source pagination.</p>
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
         {sections.map((section) => (
           <div key={section.label}>

@@ -15,6 +15,15 @@ export const metadata: Metadata = {
   description:
     "Merge, split, organize, rotate, convert and protect PDFs directly in your browser. No uploads. No watermark. No account required.",
   applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: `${SITE_NAME} - PDF tools that never see your PDFs`,
+    description:
+      "Merge, split, organize, rotate, convert and protect PDFs directly in your browser. No uploads. No watermark. No account required.",
+    url: "/",
+    siteName: SITE_NAME,
+    type: "website",
+  },
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
@@ -32,7 +41,7 @@ export const viewport: Viewport = {
 };
 
 const themeInitScript = `
-(function(){try{var t=localStorage.getItem('pz.theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();
+(function(){try{var t=localStorage.getItem('ngpdfs.theme')||localStorage.getItem('pz.theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();
 `;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

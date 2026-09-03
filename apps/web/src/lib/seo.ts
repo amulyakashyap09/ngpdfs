@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTool, type ToolDefinition } from "./tool-registry";
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://paperzero.app";
-export const SITE_NAME = "PaperZero";
+export const SITE_URL = "https://ngpdfs.com";
+export const SITE_NAME = "NGPDFs";
 
 export function absoluteUrl(path: string): string {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;

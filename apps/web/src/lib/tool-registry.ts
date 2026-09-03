@@ -765,7 +765,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "Remove Password",
     shortDescription: "Decrypt a PDF you know the password to, entirely on-device.",
     longDescription:
-      "Remove password protection from a PDF by decrypting it locally with the password you already know. The document is rebuilt as an unencrypted copy without ever sending your password anywhere. PaperZero does not crack unknown passwords.",
+      "Remove password protection from a PDF by decrypting it locally with the password you already know. The document is rebuilt as an unencrypted copy without ever sending your password anywhere. NGPDFs does not crack unknown passwords.",
     category: "security",
     acceptedFileTypes: "application/pdf,.pdf",
     outputTypes: ["pdf"],
@@ -783,7 +783,7 @@ export const TOOLS: ToolDefinition[] = [
       {
         question: "Can you remove a password I don't know?",
         answer:
-          "No - that would be cracking, which PaperZero will never do. You must supply the legitimate password.",
+          "No - that would be cracking, which NGPDFs will never do. You must supply the legitimate password.",
       },
       {
         question: "Where does my password go?",
@@ -971,13 +971,13 @@ export const TOOLS: ToolDefinition[] = [
       "Open a PDF and review the local preflight estimate.",
       "Choose a quality preset or a best-effort target size.",
       "Ghostscript compresses the document inside a dedicated WebAssembly worker.",
-      "PaperZero validates page count and renders a sample before offering the smaller result.",
+      "NGPDFs validates page count and renders a sample before offering the smaller result.",
     ],
     faq: [
       {
         question: "Can every PDF become much smaller?",
         answer:
-          "No. Text-only and already-optimized PDFs may have little to save. If the result is larger, PaperZero reports that honestly and does not offer it as a replacement.",
+          "No. Text-only and already-optimized PDFs may have little to save. If the result is larger, NGPDFs reports that honestly and does not offer it as a replacement.",
       },
       {
         question: "Are target sizes guaranteed?",
@@ -1012,7 +1012,7 @@ export const TOOLS: ToolDefinition[] = [
       "A bounded sequence of increasingly aggressive image settings runs locally.",
       "Download the smallest validated result and check whether the target was reached.",
     ],
-    faq: [{ question: "Why might 100 KB be impossible?", answer: "Every PDF needs structural overhead, fonts and page content. Long or image-heavy documents may become unreadable before reaching 100 KB, so PaperZero stops after a bounded retry budget." }],
+    faq: [{ question: "Why might 100 KB be impossible?", answer: "Every PDF needs structural overhead, fonts and page content. Long or image-heavy documents may become unreadable before reaching 100 KB, so NGPDFs stops after a bounded retry budget." }],
     relatedToolIds: ["compress-pdf", "compress-pdf-to-200kb", "split-pdf"],
   }),
   t({
@@ -1032,7 +1032,7 @@ export const TOOLS: ToolDefinition[] = [
     howItWorks: [
       "Open a PDF and inspect its local preflight report.",
       "Keep or adjust the 200 KB target.",
-      "PaperZero runs a bounded set of local compression passes.",
+      "NGPDFs runs a bounded set of local compression passes.",
       "Review the achieved size and download only a smaller validated result.",
     ],
     faq: [{ question: "Will it keep trying until it reaches 200 KB?", answer: "No. It stops after at most four attempts, or two on constrained devices, to protect battery, memory and legibility." }],
@@ -1058,7 +1058,7 @@ export const TOOLS: ToolDefinition[] = [
       "Quality is reduced only through a bounded progression when needed.",
       "Validate the achieved result before submitting it to a portal.",
     ],
-    faq: [{ question: "Is 2 MB guaranteed?", answer: "No. The achievable size depends on page count, images and fonts. PaperZero returns the best validated result within its retry limit." }],
+    faq: [{ question: "Is 2 MB guaranteed?", answer: "No. The achievable size depends on page count, images and fonts. NGPDFs returns the best validated result within its retry limit." }],
     relatedToolIds: ["compress-pdf", "compress-pdf-to-200kb", "split-pdf"],
   }),
   t({
@@ -1136,7 +1136,7 @@ export const TOOLS: ToolDefinition[] = [
       "Wide tables paginate into readable column sections and the PDF is validated before download.",
     ],
     faq: [
-      { question: "Are formulas recalculated?", answer: "No. PaperZero never runs workbook logic. It uses the cached displayed value stored by the spreadsheet application; cells without one are labeled with their formula text." },
+      { question: "Are formulas recalculated?", answer: "No. NGPDFs never runs workbook logic. It uses the cached displayed value stored by the spreadsheet application; cells without one are labeled with their formula text." },
       { question: "What happens to XLSM macros?", answer: "VBA is detected, ignored, and never executed. Only displayed values and supported styles are converted." },
       { question: "Do charts and worksheet images render?", answer: "Not in this table-first adapter. They are detected and disclosed in the compatibility report rather than silently represented inaccurately." },
     ],
@@ -1148,7 +1148,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "PowerPoint to PDF",
     shortDescription: "Render PPTX slides into a local PDF while retaining slide dimensions.",
     longDescription:
-      "Convert PPTX presentations entirely in the browser with one PDF page per slide. PaperZero preserves source slide dimensions, order, backgrounds, positioned text, basic shapes, connectors, PNG/JPEG images, theme colors, and z-order while clearly reporting font, gradient, group-transform, animation, chart, and SmartArt limitations.",
+      "Convert PPTX presentations entirely in the browser with one PDF page per slide. NGPDFs preserves source slide dimensions, order, backgrounds, positioned text, basic shapes, connectors, PNG/JPEG images, theme colors, and z-order while clearly reporting font, gradient, group-transform, animation, chart, and SmartArt limitations.",
     category: "convert-to-pdf",
     acceptedFileTypes: "application/vnd.openxmlformats-officedocument.presentationml.presentation,.pptx",
     outputTypes: ["pdf"],
@@ -1175,7 +1175,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "HTML to PDF",
     shortDescription: "Convert safe local HTML structure into PDF without executing scripts.",
     longDescription:
-      "Paste HTML or import an HTML file. PaperZero parses it as inert structure, strips scripts, frames, forms, event handlers, and other active content, blocks external resources, and converts supported typography, lists, tables, links, page breaks, and embedded data images into a paginated PDF.",
+      "Paste HTML or import an HTML file. NGPDFs parses it as inert structure, strips scripts, frames, forms, event handlers, and other active content, blocks external resources, and converts supported typography, lists, tables, links, page breaks, and embedded data images into a paginated PDF.",
     category: "convert-to-pdf",
     acceptedFileTypes: "text/html,.html,.htm",
     outputTypes: ["pdf"],
@@ -1217,7 +1217,7 @@ export const TOOLS: ToolDefinition[] = [
       "Wide columns are split into labeled sections and exported locally.",
     ],
     faq: [
-      { question: "How are very wide tables handled?", answer: "PaperZero paginates at most ten columns per horizontal section instead of shrinking text below a readable threshold." },
+      { question: "How are very wide tables handled?", answer: "NGPDFs paginates at most ten columns per horizontal section instead of shrinking text below a readable threshold." },
       { question: "Can it process hundreds of thousands of rows?", answer: "No. Export is explicitly capped at 10,000 rows and 40 columns to prevent a browser tab from freezing; the chosen lower limit is shown before conversion." },
       { question: "Does it handle commas inside values?", answer: "Yes. The bounded parser handles quoted delimiters, escaped quotes, and quoted line breaks." },
     ],
@@ -1270,7 +1270,7 @@ export const TOOLS: ToolDefinition[] = [
       "Choose book typography and download the locally generated PDF.",
     ],
     faq: [
-      { question: "Do you support MOBI or AZW3?", answer: "No. PaperZero advertises only formats it can parse locally with a reviewed implementation: EPUB, TXT, and HTML in this phase." },
+      { question: "Do you support MOBI or AZW3?", answer: "No. NGPDFs advertises only formats it can parse locally with a reviewed implementation: EPUB, TXT, and HTML in this phase." },
       { question: "Can EPUB scripts or remote trackers run?", answer: "No. Chapters are parsed as inert document structure. Scripts, frames, interactive media, and remote resources are omitted." },
       { question: "What about DRM-protected books?", answer: "DRM is not bypassed. Only unencrypted EPUB packages you are authorized to convert are supported." },
     ],
@@ -1297,7 +1297,7 @@ export const TOOLS: ToolDefinition[] = [
       "The shared worker paginator creates and validates the transcript PDF without embedding or uploading the audio.",
     ],
     faq: [
-      { question: "Does PaperZero automatically transcribe my audio?", answer: "Not in this build. A suitable on-device Whisper package would add roughly 100 MB and substantial device requirements, so this route provides the phase's conservative editable fallback and says so before file selection." },
+      { question: "Does NGPDFs automatically transcribe my audio?", answer: "Not in this build. A suitable on-device Whisper package would add roughly 100 MB and substantial device requirements, so this route provides the phase's conservative editable fallback and says so before file selection." },
       { question: "Is my audio sent to a speech API?", answer: "No. The recording is played from a temporary browser object URL. No browser or cloud speech-recognition service is called." },
       { question: "Are speakers identified automatically?", answer: "No. Speaker labels are not claimed because diarization is not implemented. You can type labels into the reviewed transcript yourself." },
     ],
@@ -1351,7 +1351,7 @@ export const TOOLS: ToolDefinition[] = [
       "Download a validated XLSX with one worksheet per selected table.",
     ],
     faq: [
-      { question: "Why can’t I select a low-confidence table?", answer: "PaperZero requires at least 68% confidence to avoid quietly turning parallel prose or irregular layouts into misleading spreadsheet cells." },
+      { question: "Why can’t I select a low-confidence table?", answer: "NGPDFs requires at least 68% confidence to avoid quietly turning parallel prose or irregular layouts into misleading spreadsheet cells." },
       { question: "Are numbers recalculated?", answer: "No. Values are exported as displayed strings so leading zeros, separators, signs, and currency marks remain available for human verification." },
       { question: "Does it extract every page into a sheet?", answer: "No. This tool exports detected tables only. Use Extract Text or PDF to Word for narrative content." },
     ],
@@ -1460,7 +1460,7 @@ export const TOOLS: ToolDefinition[] = [
     ],
     faq: [
       { question: "Can I download an MP3?", answer: "No. The browser SpeechSynthesis API provides playback, not a trustworthy local audio encoder, so this tool makes no downloadable-audio claim." },
-      { question: "Why are no voices available?", answer: "PaperZero only lists voices the browser marks as local. If none are exposed, the extracted text remains available to read but is not sent to an online voice." },
+      { question: "Why are no voices available?", answer: "NGPDFs only lists voices the browser marks as local. If none are exposed, the extracted text remains available to read but is not sent to an online voice." },
       { question: "Does my document text leave the browser?", answer: "No. Extraction and optional OCR are local, and voices not explicitly marked local are excluded from playback." },
     ],
     relatedToolIds: ["extract-text", "ocr-pdf", "pdf-to-epub"],
@@ -1481,7 +1481,7 @@ export const TOOLS: ToolDefinition[] = [
     status: "available",
     howItWorks: [
       "Open a scanned or mixed PDF and choose pages and a recognition language.",
-      "PaperZero skips text-rich pages unless you explicitly force OCR.",
+      "NGPDFs skips text-rich pages unless you explicitly force OCR.",
       "Selected pages are rendered and preprocessed one at a time before local recognition.",
       "An invisible text layer is aligned over the unchanged visual pages and verified before download.",
     ],
@@ -1492,7 +1492,7 @@ export const TOOLS: ToolDefinition[] = [
       },
       {
         question: "Why are only English and Spanish available initially?",
-        answer: "Language models are several megabytes each. PaperZero starts with two explicitly pinned, self-hosted models instead of silently downloading a large catalog; more languages can be added after fixture validation.",
+        answer: "Language models are several megabytes each. NGPDFs starts with two explicitly pinned, self-hosted models instead of silently downloading a large catalog; more languages can be added after fixture validation.",
       },
       {
         question: "Is handwriting recognition accurate?",
@@ -1523,7 +1523,7 @@ export const TOOLS: ToolDefinition[] = [
     ],
     faq: [
       { question: "When is camera permission requested?", answer: "Only after you press Start camera. If permission is unavailable or denied, photo import remains fully usable." },
-      { question: "Is automatic edge detection final?", answer: "No. It is a lightweight local suggestion and can be wrong. PaperZero always exposes all four corners for review and adjustment." },
+      { question: "Is automatic edge detection final?", answer: "No. It is a lightweight local suggestion and can be wrong. NGPDFs always exposes all four corners for review and adjustment." },
       { question: "Are captured pages uploaded?", answer: "No. Camera frames, crop coordinates, corrected images, OCR, and PDF assembly remain in browser memory." },
     ],
     relatedToolIds: ["ocr-pdf", "images-to-pdf", "handwriting-to-pdf"],

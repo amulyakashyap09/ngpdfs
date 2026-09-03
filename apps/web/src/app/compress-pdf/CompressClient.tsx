@@ -190,7 +190,7 @@ export function CompressClient({ defaultTargetBytes }: { defaultTargetBytes?: nu
           {analysis.alreadyOptimized ? (
             <p className="mt-3 text-xs text-amber-700 dark:text-amber-300">
               This PDF already shows common optimization signals. Compression may save little or
-              even make it larger; PaperZero will not offer a larger replacement.
+              even make it larger; NGPDFs will not offer a larger replacement.
             </p>
           ) : null}
           {analysis.hasSignatureFields ? (
