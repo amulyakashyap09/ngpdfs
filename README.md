@@ -12,8 +12,8 @@ pdf-lib and PDF.js — no uploads, no watermarks, no accounts.
 
 
 GitHub sanitizes executable scripts in rendered README files, so the direct link above
-remains the reliable repository-page fallback. The same widget is active on PaperZero's
-main application page.
+remains the reliable repository-page fallback. PaperZero also shows this support link as
+a floating button on every application page.
 
 This repository currently implements **Phases 0–7** of the product roadmap in
 `README(2).md`: foundation, core tools, editing, security/privacy, compression,

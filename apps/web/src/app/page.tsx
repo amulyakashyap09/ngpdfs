@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Script from "next/script";
-import { createElement } from "react";
 import { ToolCatalog } from "@/components/ToolCatalog";
 
 export default function HomePage() {
@@ -19,17 +17,6 @@ export default function HomePage() {
         </p>
       </section>
       <ToolCatalog />
-      <section className="mt-16 rounded-2xl border border-violet-200 bg-violet-50 p-8 text-center dark:border-violet-900 dark:bg-violet-950/30" aria-labelledby="support-paperzero">
-        <h2 id="support-paperzero" className="text-xl font-bold text-slate-900 dark:text-white">Donate ❤️</h2>
-        <p className="mx-auto mb-5 mt-2 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-          If private, browser-local PDF tools save you time, you can support their continued development through Bondin.
-        </p>
-        <Script async src="https://bondin.io/embed/v1.js" strategy="afterInteractive" />
-        {createElement("bondin-support", { username: "amulya", label: "Support me" })}
-        <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
-          This homepage loads the support widget from bondin.io. No PDF or document content is shared with it.
-        </p>
-      </section>
       <section className="mt-16 grid gap-6 rounded-2xl border border-slate-200 bg-slate-50 p-8 text-sm leading-relaxed text-slate-600 md:grid-cols-3 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
         <div>
           <h2 className="mb-2 font-bold text-slate-900 dark:text-white">Zero uploads</h2>

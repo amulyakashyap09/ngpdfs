@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { DonateButton } from "@/components/DonateButton";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <div id="main-content" className="flex-1">{children}</div>
         <Footer />
+        <DonateButton />
         <ServiceWorkerRegister />
       </body>
     </html>
